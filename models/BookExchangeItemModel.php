@@ -11,9 +11,11 @@ class BookExchangeItemModel
     private string $author;
     private string $description;
     private bool $status;
+    private string $picture;
 
     private int $idUser;
     private string $username;
+    private string $profilePicture;
 
     public function __construct(array $line)
     {
@@ -22,9 +24,11 @@ class BookExchangeItemModel
         $this->author = $line['author'];
         $this->description = $line['description'];
         $this->status = $line['status'];
+        $this->picture = $line['picture'];
 
         $this->idUser = $line['id_user'];
         $this->username = $line['username'];
+        $this->profilePicture = $line['profile_picture'];
     }
 
     /**
@@ -99,6 +103,26 @@ class BookExchangeItemModel
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * Retourne l'image du livre.
+     *
+     * @return string L'image du livre
+     */
+    public function getPicture(): string
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Retourne la photo de profil de l'utilisateur propriétaire du livre.
+     *
+     * @return string La photo de profil de l'utilisateur
+     */
+    public function getProfilePicture(): string
+    {
+        return $this->profilePicture;
     }
 
     /**
@@ -180,5 +204,27 @@ class BookExchangeItemModel
     public function setUsername(string $username): void
     {
         $this->username = $username;
+    }
+
+    /**
+     * Définit l'image du livre.
+     *
+     * @param string $picture L'image du livre
+     * @return void
+     */
+    public function setPicture(string $picture): void
+    {
+        $this->picture = $picture;
+    }
+
+    /**
+     * Définit la photo de profil de l'utilisateur propriétaire du livre.
+     *
+     * @param string $profilePicture La photo de profil de l'utilisateur
+     * @return void
+     */
+    public function setProfilePicture(string $profilePicture): void
+    {
+        $this->profilePicture = $profilePicture;
     }
 }

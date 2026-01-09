@@ -87,4 +87,28 @@ class Utils
     {
         return $_REQUEST[$variableName] ?? $defaultValue;
     }
+    /**
+     * Convertit une chaîne de caractères en slug URL-friendly.
+     * Transforme le texte en minuscules, supprime les accents, remplace les caractères 
+     * spéciaux par des tirets et nettoie les tirets superflus.
+     * @param string $text : le texte à convertir.
+     * @return string : le slug généré.
+     */
+    public static function slugify(string $text): string
+    {
+        // Convertit en minuscules
+        $text = strtolower($text);
+
+        // Remplace les accents
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+
+        // Remplace tout ce qui n’est pas alphanumérique par un tiret
+        $text = preg_replace('/[^a-z0-9]+/', '-', $text);
+
+        // Enlève les tirets multiples
+        $text = preg_replace('/-+/', '-', $text);
+
+        // Supprime les tirets au début et à la fin
+        return trim($text, '-');
+    }
 }

@@ -24,7 +24,7 @@ class User extends AbstractEntity
      * Getter pour le pseudo.
      * @return string
      */
-    public function getUsername(): string
+    public function getUserName(): string
     {
         return $this->username;
     }
@@ -69,7 +69,7 @@ class User extends AbstractEntity
      * Setter pour la photo de profil.
      * @param string $picture
      */
-    public function setPictureProfil(string $picture): void
+    public function setProfilePicture(string $picture): void
     {
         $this->picture = $picture;
     }
@@ -78,7 +78,7 @@ class User extends AbstractEntity
      * Getter pour la photo de profil.
      * @return string
      */
-    public function getPictureProfil(): string
+    public function getProfilePicture(): string
     {
         return $this->picture;
     }

@@ -16,7 +16,7 @@ class ThreadManager extends AbstractEntityManager
         $sql = "SELECT
             t.id AS idThread,
             u.username,
-            u.profil_picture AS userPicture,
+            u.profile_picture AS userPicture,
             tm.content AS previewLastMessage,
             tm.date_creation AS dateLastMessage
         FROM thread t
@@ -59,7 +59,7 @@ class ThreadManager extends AbstractEntityManager
             t.id_user_transmitter,
             t.content,
             t.date_creation,
-            u.profil_picture
+            u.profile_picture
         FROM thread_message t
         JOIN users u ON m.id_user_transmitter = u.id
         WHERE t.id_thread = ( 

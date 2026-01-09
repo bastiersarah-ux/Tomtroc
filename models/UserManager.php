@@ -14,7 +14,7 @@ class UserManager extends AbstractEntityManager
      */
     public function getUserById(string $id): ?User
     {
-        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profil_picture` FROM user WHERE id = :id";
+        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profile_picture` FROM user WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $id]);
         $user = $result->fetch();
         if ($id) {
@@ -30,7 +30,7 @@ class UserManager extends AbstractEntityManager
      */
     public function getUserByUserName(string $username): ?User
     {
-        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profil_picture` FROM user WHERE username = :username";
+        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profile_picture` FROM user WHERE username = :username";
         $result = $this->db->query($sql, ['username' => $username]);
         $user = $result->fetch();
         if ($user) {
@@ -46,13 +46,13 @@ class UserManager extends AbstractEntityManager
      */
     public function getUserByEmail(string $email): ?User
     {
-        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profil_picture` FROM user WHERE email = :email";
+        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profile_picture` FROM user WHERE email = :email";
         $result = $this->db->query($sql, ['email' => $email]);
         $user = $result->fetch();
-        if ($email) {
-            return new User($user);
+        if (empty($user)) {
+            return null;
         }
-        return null;
+        return new User($user);
     }
 
     /**
@@ -60,9 +60,9 @@ class UserManager extends AbstractEntityManager
      * @param string $email
      * @param string $username
      * @param string $password
-     * @return ?User
+     * @return int|null
      */
-    public function registerUser(string $email, string $username, string $password): bool
+    public function registerUser(string $email, string $username, string $password): ?int
     {
         $sql = "INSERT INTO user (username, email, password, date_creation) VALUES (:username, :email, :password, NOW())";
         $result = $this->db->query($sql, [
@@ -70,6 +70,31 @@ class UserManager extends AbstractEntityManager
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT)
         ]);
-        return $result->rowCount() > 0;
+        if ($result->rowCount()  == 0) {
+            return null;
+        }
+        return $this->db->getPDO()->lastInsertId();
+    }
+
+    public function updateUser(User $user): void
+    {
+        $sql = "UPDATE user SET username = :username, email = :email, password = :password, profile_picture = :profile_picture WHERE id = :id";
+        $this->db->query($sql, [
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'password' => $user->getPassword(),
+            'profile_picture' => $user->getProfilePicture(),
+        ]);
+    }
+
+    public function getUserBySlug(string $slug): ?User
+    {
+        $sql = "SELECT * FROM users WHERE slug = :slug";
+        $result = $this->db->query($sql, ['slug' => $slug]);
+        $user = $result->fetch();
+        if (empty($user)) {
+            return null;
+        }
+        return new User($user);
     }
 }

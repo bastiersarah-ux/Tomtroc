@@ -12,7 +12,9 @@ class BookManager extends AbstractEntityManager
      */
     public function getAllBooks(?string $search): array
     {
-        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book";
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+            FROM `book` b 
+            INNER JOIN user u ON u.id = b.id_user";
         $params = [];
 
         if (!empty($search)) {
@@ -24,7 +26,7 @@ class BookManager extends AbstractEntityManager
         $books = [];
 
         while ($book = $result->fetch()) {
-            $books[] = new Book($book);
+            $books[] = new BookExchangeItemModel($book);
         }
         return $books;
     }
@@ -35,13 +37,16 @@ class BookManager extends AbstractEntityManager
      * @param int $id : l'id de lu livre.
      * @return BookExchangeItemModel|null : un objet BookExchangeItemModel ou null si le livre n'existe pas.
      */
-    public function getBookById(int $id): ?Book
+    public function getBookById(int $id): ?BookExchangeItemModel
     {
-        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book WHERE id = :id";
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+            FROM `book` b 
+            INNER JOIN user u ON u.id = b.id_user
+            WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $id]);
         $book = $result->fetch();
         if ($book) {
-            return new Book($book);
+            return new BookExchangeItemModel($book);
         }
         return null;
     }
