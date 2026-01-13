@@ -1,0 +1,25 @@
+{
+  "name": "tomtroc",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bastiersarah-ux/Tomtroc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bastiersarah-ux/Tomtroc/issues"
+  },
+  "homepage": "https://github.com/bastiersarah-ux/Tomtroc#readme",
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/style.css -o ./public/tomtroc.css",
+    "watch:css": "tailwindcss -i ./css/style.css -o ./public/tomtroc.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "autoprefixer": "^10.4.23",
+    "daisyui": "^5.5.14",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
+  }
+}

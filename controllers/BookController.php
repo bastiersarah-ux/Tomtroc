@@ -7,16 +7,17 @@ class BookController extends AbstractController
      * @param $books : les livres à afficher
      * @return void
      */
-    public function showHome($books): void
+    public function showHome(): void
     {
+
         // Récupère les 4 livres à l'échange les plus récents 
         $bookManager = new BookManager();
-        $books = $bookManager->getLastBooks($books);
+        $books = $bookManager->getLastBooks();
 
         // Envoi à la vue
         $view = new View("Accueil");
         $view->render("home", [
-            'books' => $books
+            'books' => $books,
         ]);
     }
 
@@ -109,7 +110,7 @@ class BookController extends AbstractController
         // Affiche la page avec le formulaire
         $view = new View("BookForm");
         $view->render("editBookForm", [
-            'book'         => $book,
+            'book' => $book,
             'errorMessage' => $errorMessage
         ]);
     }
@@ -123,10 +124,10 @@ class BookController extends AbstractController
         $this->checkIfUserIsConnected();
 
         // Récupération des champs du formulaire
-        $title       = Utils::request('title');
-        $author      = Utils::request('author');
+        $title = Utils::request('title');
+        $author = Utils::request('author');
         $description = Utils::request('description');
-        $status      = Utils::request('status');
+        $status = Utils::request('status');
 
         // Champs obligatoires
         if (empty($title) || empty($author) || empty($description) || empty($status)) {
@@ -144,27 +145,34 @@ class BookController extends AbstractController
         $idBook = Utils::request('idBook');
 
         $bookManager = new BookManager();
+        $idUser = $this->getConnectedUserId();
 
         try {
             // Si pas d'id → création
             if (empty($idBook)) {
-
                 $bookManager->addBook(
                     $title,
                     $author,
                     $description,
                     $status,
-                    $this->getConnectedUserId()
+                    "",
+                    $idUser
                 );
             } else {
                 // Sinon → mise à jour
+
+                if (!$bookManager->isBookExist($idBook, $idUser)) {
+                    $_SESSION['showMyAccountError'] = "Le livre que vous essayer de modifier n'existe pas";
+                    Utils::redirect("showMyAccount");
+                    return;
+                }
+
                 $bookManager->updateBook(
-                    $idBook,
                     $title,
                     $author,
                     $description,
                     $status,
-                    $this->getConnectedUserId()
+                    ""
                 );
             }
 

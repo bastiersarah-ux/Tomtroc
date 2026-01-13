@@ -13,9 +13,96 @@ try {
     switch ($action) {
         // Pages accessibles à tous.
         case 'home':
-            $controller = new BookController();
-            $controller->showHome();
+            $bookcontroller = new BookController();
+            $bookcontroller->showHome();
             break;
+
+        case 'showBooks':
+            $bookcontroller = new BookController();
+            $bookcontroller->showBooks();
+            break;
+
+        case 'showBookDetail':
+            $bookcontroller = new BookController();
+            $bookcontroller->showBookDetail();
+            break;
+
+        case 'showUserProfile':
+            $userController = new UserController();
+            $userController->showUserProfile();
+            break;
+
+        case 'showInscriptionForm':
+            $userController = new UserController();
+            $userController->showInscriptionForm();
+            break;
+
+        case 'showConnectionForm':
+            $userController = new UserController();
+            $userController->showconnectionForm();
+            break;
+
+
+        // Section utilisateur connecté 
+
+        case 'connectUser':
+            $userController = new UserController();
+            $userController->connectUser();
+            break;
+
+        case 'registerUser':
+            $userController = new UserController();
+            $userController->registerUser();
+            break;
+
+        case 'myAccount':
+            $userController = new UserController();
+            $userController->showMyAccount();
+            break;
+
+        case 'editMyProfile':
+            $userController = new UserController();
+            $userController->editUser();
+            break;
+
+        case 'disconnectUser':
+            $userController = new UserController();
+            $userController->disconnectUser();
+            break;
+
+        case 'editBookForm':
+            $bookController = new BookController();
+            $bookController->showBookForm();
+            break;
+
+        case 'editBook':
+            $bookController = new BookController();
+            $bookController->addOrUpdateBookForm();
+            break;
+
+        case 'deleteBook':
+            $bookController = new BookController();
+            $bookController->deleteBook();
+            break;
+
+        // Section messagerie
+
+        case 'showThreads':
+            $threadController = new ThreadController();
+            $threadController->showThreads();
+            break;
+
+        case 'createThread':
+            $threadController = new ThreadController();
+            $threadController->createThread();
+            break;
+
+
+        case 'sendMessage':
+            $threadController = new ThreadController();
+            $threadController->sendMessage();
+            break;
+
         default:
             throw new Exception("La page demandée n'existe pas.");
     }

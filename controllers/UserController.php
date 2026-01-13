@@ -15,6 +15,9 @@ class UserController extends AbstractController
         // Vérifie si l’utilisateur est connecté
         $this->checkIfUserIsConnected();
 
+        // On récupère une éventuelle erreur liée au formulaire
+        $errorMessage = $this->getAndClearVariableSession('showMyAccountError');
+
         // Récupère l’ID de l’utilisateur via la session
         $idUser = $_SESSION['idUser'];
 
@@ -29,9 +32,10 @@ class UserController extends AbstractController
         // Affiche la page du profil utilisateur
         $view = new View("MyAccount");
         $view->render("showMyAccount", [
-            'user'  => $user,
+            'user' => $user,
             'books' => $books,
-            'owner' => true
+            'owner' => true,
+            'error' => $errorMessage
         ]);
     }
 
@@ -39,7 +43,7 @@ class UserController extends AbstractController
      * Affiche le profil public d'un utilisateur.
      * @return void
      */
-    public function showUserProfil(): void
+    public function showUserProfile(): void
     {
         // Récupère le slug de l'utilisateur demandé dans l'URL.
         $slug = Utils::request('slug');
@@ -65,7 +69,7 @@ class UserController extends AbstractController
         // Affiche la page du profil utilisateur
         $view = new View("UserProfile");
         $view->render("showUserProfile", [
-            'user'  => $user,
+            'user' => $user,
             'books' => $books,
             'owner' => false
         ]);
@@ -81,8 +85,8 @@ class UserController extends AbstractController
 
         // Affiche la page du profil utilisateur
         $view = new View("Inscription");
-        $view->render("InscriptionForm", [
-            'errorMessage'  => $errorMessage,
+        $view->render("showInscriptionForm", [
+            'errorMessage' => $errorMessage,
         ]);
     }
 
@@ -97,8 +101,8 @@ class UserController extends AbstractController
 
         // Affiche la page du profil utilisateur
         $view = new View("Authentification");
-        $view->render("connectionForm", [
-            'errorMessage'  => $errorMessage,
+        $view->render("showConnectionForm", [
+            'errorMessage' => $errorMessage,
         ]);
     }
 
@@ -152,23 +156,23 @@ class UserController extends AbstractController
         // On vérifie si les champs obligatoires sont remplis
         if (empty($username) || empty($email) || empty($password)) {
             $_SESSION['inscriptionFormError'] = "Tous les champs sont obligatoires.";
-            Utils::redirect('inscriptionForm');
+            Utils::redirect('showInscriptionForm');
             return;
         }
 
         // On vérifie si l'email est valdie
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['inscriptionFormError'] = "L'adresse email n'est pas valide.";
-            Utils::redirect('inscriptionForm');
+            Utils::redirect('showInscriptionForm');
             return;
         }
 
         $userManager = new UserManager();
 
         // On vérifie si l'utilisateur existe déjà
-        if ($userManager->getUserByEmail($email)) {
+        if ($userManager->checkIfEmailUsed($email)) {
             $_SESSION['inscriptionFormError'] = "Un compte existe déjà avec cet email.";
-            Utils::redirect('inscriptionForm');
+            Utils::redirect('showInscriptionForm');
             return;
         }
 
@@ -181,12 +185,70 @@ class UserController extends AbstractController
         } catch (Exception $ex) {
             $_SESSION['inscriptionFormError'] =
                 "Une erreur est survenue lors de l'inscription. Veuillez réessayer ultérieurement ou contacter l'administrateur.";
-            Utils::redirect('inscriptionForm');
+            Utils::redirect('showInscriptionForm');
             return;
         }
 
         // On stocke en session l'id de l'utilisateur, ce qui le connecte
         $_SESSION['idUser'] = $idUser;
+
+        // On redirige vers la page du compte utilisateur
+        Utils::redirect("myAccount");
+    }
+
+    /**
+     * Modifie l'utilisateur connecté.
+     * @return void
+     */
+    public function editUser(): void
+    {
+        // Vérifie que l’utilisateur est connecté
+        $this->checkIfUserIsConnected();
+
+        // On récupère les données du formulaire
+        $username = Utils::request("username");
+        $email = Utils::request("email");
+        $password = Utils::request("password");
+
+        // On vérifie si les champs obligatoires sont remplis
+        if (empty($username) || empty($email) || empty($password)) {
+            $_SESSION['myAccountError'] = "Tous les champs sont obligatoires.";
+            Utils::redirect('myAccount');
+            return;
+        }
+
+        // On vérifie si l'email est valdie
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['myAccountError'] = "L'adresse email n'est pas valide.";
+            Utils::redirect('myAccount');
+            return;
+        }
+
+        $userManager = new UserManager();
+
+        // On vérifie si l'utilisateur existe déjà
+        if ($userManager->checkIfEmailUsed($email)) {
+            $_SESSION['myAccountError'] = "Un compte existe déjà avec cet email.";
+            Utils::redirect('myAccount');
+            return;
+        }
+
+        $user = $userManager->getUserById($this->getConnectedUserId());
+
+        // TODO : Gérer la modification de l'image de profil
+
+        // On génère un slug basé sur le username
+        $slug = Utils::slugify($username);
+
+        try {
+            // On enregistre l’utilisateur
+            $userManager->updateUser($email, $username, $password, $slug);
+        } catch (Exception $ex) {
+            $_SESSION['myAccountError'] =
+                "Une erreur est survenue lors de la modification des informations. Veuillez réessayer ultérieurement ou contacter l'administrateur.";
+            Utils::redirect('myAccount');
+            return;
+        }
 
         // On redirige vers la page du compte utilisateur
         Utils::redirect("myAccount");

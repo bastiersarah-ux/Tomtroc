@@ -11,11 +11,11 @@ class BookExchangeItemModel
     private string $author;
     private string $description;
     private bool $status;
-    private string $picture;
+    private ?string $picture;
 
     private int $idUser;
     private string $username;
-    private string $profilePicture;
+    private ?string $profilePicture;
 
     public function __construct(array $line)
     {
@@ -108,11 +108,11 @@ class BookExchangeItemModel
     /**
      * Retourne l'image du livre.
      *
-     * @return string L'image du livre
+     * @return string|null L'image du livre
      */
-    public function getPicture(): string
+    public function getPicture(): ?string
     {
-        return $this->picture;
+        return $this->picture ?? "";
     }
 
     /**
@@ -123,108 +123,5 @@ class BookExchangeItemModel
     public function getProfilePicture(): string
     {
         return $this->profilePicture;
-    }
-
-    /**
-     * SETTERS
-     */
-
-    /**
-     * Définit l'identifiant du livre.
-     *
-     * @param int $idBook L'ID du livre
-     * @return void
-     */
-    public function setIdBook(int $idBook): void
-    {
-        $this->idBook = $idBook;
-    }
-
-    /**
-     * Définit le titre du livre.
-     *
-     * @param string $title Le titre du livre
-     * @return void
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * Définit l'auteur du livre.
-     *
-     * @param string $author L'auteur du livre
-     * @return void
-     */
-    public function setAuthor(string $author): void
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * Définit la description du livre.
-     *
-     * @param string $description La description du livre
-     * @return void
-     */
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Définit le statut du livre.
-     *
-     * @param bool $status Le statut du livre (disponible ou non)
-     * @return void
-     */
-    public function setStatus(bool $status): void
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * Définit l'identifiant de l'utilisateur propriétaire du livre.
-     *
-     * @param int $idUser L'ID de l'utilisateur
-     * @return void
-     */
-    public function setIdUser(int $idUser): void
-    {
-        $this->idUser = $idUser;
-    }
-
-    /**
-     * Définit le pseudo de l'utilisateur propriétaire du livre.
-     *
-     * @param string $username Le pseudo de l'utilisateur
-     * @return void
-     */
-    public function setUsername(string $username): void
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * Définit l'image du livre.
-     *
-     * @param string $picture L'image du livre
-     * @return void
-     */
-    public function setPicture(string $picture): void
-    {
-        $this->picture = $picture;
-    }
-
-    /**
-     * Définit la photo de profil de l'utilisateur propriétaire du livre.
-     *
-     * @param string $profilePicture La photo de profil de l'utilisateur
-     * @return void
-     */
-    public function setProfilePicture(string $profilePicture): void
-    {
-        $this->profilePicture = $profilePicture;
     }
 }

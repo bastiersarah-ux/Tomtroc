@@ -73,16 +73,24 @@ class BookManager extends AbstractEntityManager
      * @param int $idUser : l'id de l'utilisateur.
      * @return array : un tableau d'objets Book.
      */
-    public function getAllBooksbyIdUser(): array
+    public function getAllBooksbyIdUser(int $idUser): array
     {
-        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book";
-        $result = $this->db->query($sql);
+        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book WHERE id_user = :idUser";
+        $result = $this->db->query($sql, ["idUser" => $idUser]);
         $books = [];
 
         while ($book = $result->fetch()) {
             $books[] = new Book($book);
         }
         return $books;
+    }
+
+    public function isBookExist(int $idBook, int $idUser): bool
+    {
+        $sql = "SELECT 1 FROM book WHERE id = :idBook AND id_user = :idUser";
+        $result = $this->db->query($sql, ["idBook" => $idBook, "idUser" => $idUser]);
+
+        return $result->rowCount() > 0;
     }
 
     /**
@@ -93,21 +101,19 @@ class BookManager extends AbstractEntityManager
      * @param string $order
      * @return array : un tableau d'objets BookExchangeItemModel.
      */
-    public function getLastBooks($sort = 'date_creation', $order = 'DESC'): array
+    public function getLastBooks(): array
     {
-
-        $allowedsort = ['date_creation']; // liste des colonnes autorisées par le tri (sécurité contre injection SQL).
-        if (!in_array($sort, $allowedsort)) {
-            $sort = 'date_creation';
-        }
-        $order = 'DESC';
-        $sql = "SELECT `date_creation` FROM book ORDER BY $sort $order LIMIT 4";
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+            FROM `book` b 
+            INNER JOIN user u ON u.id = b.id_user
+            ORDER BY date_creation DESC
+            LIMIT 4";
 
         $result = $this->db->query($sql);
         $lastBooks = [];
 
-        while ($date = $result->fetch()) {
-            $lastBooks[] = new Book($date['date_creation']);
+        while ($data = $result->fetch()) {
+            $lastBooks[] = new BookExchangeItemModel($data);
         }
 
         return $lastBooks;
@@ -115,19 +121,24 @@ class BookManager extends AbstractEntityManager
 
     /**
      * Ajoute un nouveau livre.
-     * @param Book $book : l'objet Book à ajouter.
-     * @param $filename : nom du fichier de l'image du livre.
+     *
+     * @param string $title : titre du livre.
+     * @param string $description : description du livre.
+     * @param string $author : auteur du livre.
+     * @param string $status : statut du livre.
+     * @param string $filename : nom du fichier de l'image du livre.
+     * @param int $idUser : id de l'utilisateur qui ajoute le livre.
      * @return bool : true si l'ajout a réussi, false sinon.
      */
-    public function addBook(Book $book, string $filename): bool
+    public function addBook(string $title, string $description, string $author, string $status, string $filename, int $idUser): bool
     {
         $sql = "INSERT INTO book (title, description, author, status, date_creation, id_user, picture) VALUES (:title, :description, :author, :status, NOW(), :idUser, :picture)";
         $result = $this->db->query($sql, [
-            'title' => $book->getTitle(),
-            'description' => $book->getDescription(),
-            'author' => $book->getAuthor(),
-            'status' => $book->getStatus(),
-            'idUser' => $book->getidUser(),
+            'title' => $title,
+            'description' => $description,
+            'author' => $author,
+            'status' => $status,
+            'idUser' => $idUser,
             'picture' => $filename,
         ]);
         return $result->rowCount() > 0;
@@ -135,18 +146,23 @@ class BookManager extends AbstractEntityManager
 
     /**
      * Modifie un livre.
-     * @param Book $book : le livre à modifier.
-     * @param $filename : nom du fichier de l'image du livre.
+     * 
+     * @param string $title : titre du livre.
+     * @param string $description : description du livre.
+     * @param string $author : auteur du livre.
+     * @param string $status : statut du livre.
+     * @param string $filename : nom du fichier de l'image du livre.
      * @return void
      */
-    public function updateBook(Book $book, string $filename): void
+    public function updateBook(string $title, string $description, string $author, string $status, string $filename): void
     {
-        $sql = "UPDATE book SET title = :title, description = :description, author = :author, status = :status, date_creation = NOW(), picture = :picture WHERE id = :id";
+        $sql = "UPDATE book SET title = :title, description = :description, author = :author, status = :status, picture = :picture 
+                WHERE id = :id";
         $this->db->query($sql, [
-            'title' => $book->getTitle(),
-            'description' => $book->getDescription(),
-            'author' => $book->getAuthor(),
-            'status' => $book->getStatus(),
+            'title' => $title,
+            'description' => $description,
+            'author' => $author,
+            'status' => $status,
             'picture' => $filename,
         ]);
     }
