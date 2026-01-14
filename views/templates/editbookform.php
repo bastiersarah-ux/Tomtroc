@@ -11,20 +11,19 @@
     <?= $isEdit ? 'Modifier les informations' : 'Ajouter un livre' ?>
 </h2>
 
-<form class="container" method="post" action="<?= $isEdit ? 'update.php' : 'store.php' ?>" enctype="multipart/form-data">
+<form class="container" method="post" action="<?= $isEdit ? 'update.php' : 'store.php' ?>"
+    enctype="multipart/form-data">
 
     <!-- Colonne gauche -->
     <div>
         <label>Photo</label>
 
-        <?php if ($photo): ?>
-            <img src="uploads/<?= htmlspecialchars($photo) ?>" alt="Livre">
-        <?php else: ?>
-            <p>Aucune image</p>
-        <?php endif; ?>
+        <img src="<?= htmlspecialchars($book && $book->getPicture() ? Utils::getBookPictureUrl($book->getPicture()) : '/uploads/default.jpg') ?>"
+            alt="photo du livre" style="width:100px; height:auto;">
 
         <input type="file" name="photo">
     </div>
+
 
     <!-- Colonne droite -->
     <div>
@@ -44,7 +43,7 @@
         </select>
 
         <?php if ($isEdit): ?>
-            <input type="hidden" name="id" value="<?= $book['id'] ?>">
+            <input type="hidden" name="id" value="<?= $book->getId ?>">
         <?php endif; ?>
 
         <button type="submit">

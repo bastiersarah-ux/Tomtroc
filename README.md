@@ -6,3 +6,4 @@ Ce fichier contient notamment les informations de connextion à la base de donn�
 ## Copyright :
 
 Projet utilisé dans le cadre d'une formation Openclassrooms.
+Le mot de passe par défaut est "tomtroc"

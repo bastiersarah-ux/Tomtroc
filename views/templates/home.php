@@ -21,7 +21,7 @@
         </p>
         <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria" />
         <p class="signature" style="text-align: right" ;>Hamza</p>
-        <a href="?action=showBooks" class="tomtroc-button principal-green">Découvrir</a>
+        <a href="?action=showbooks" class="tomtroc-button principal-green">Découvrir</a>
     </section>
 
     <hr>
@@ -49,7 +49,7 @@
 
         <br>
 
-        <a href="?action=showBooks" class="max-md:hidden! tomtroc-button button-grey">
+        <a href="?action=showbooks" class="max-md:hidden! tomtroc-button principal-green">
             Voir tous les livres
         </a>
     </section>
@@ -82,7 +82,7 @@
         </div>
         <br>
 
-        <a href=" /index.php?action=showBooks" class="tomtroc-button button-grey">Voir tous les livres</a>
+        <a href=" /index.php?action=showbooks" class="tomtroc-button grey">Voir tous les livres</a>
         <br>
 
     </section>

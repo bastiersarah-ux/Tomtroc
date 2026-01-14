@@ -10,8 +10,8 @@ abstract class AbstractController
     protected function checkIfUserIsConnected(): void
     {
         // On vérifie que l'utilisateur est connecté.
-        if (empty($_SESSION['userId'])) {
-            Utils::redirect("connectionForm");
+        if (empty($_SESSION['idUser'])) {
+            Utils::redirect("showConnectionForm");
         }
     }
 
@@ -21,7 +21,7 @@ abstract class AbstractController
      */
     protected function getConnectedUserId(): ?int
     {
-        return $_SESSION['userId'];
+        return $_SESSION['idUser'];
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class AbstractController
             return null;
         }
 
-        $result =  $_SESSION[$key];
+        $result = $_SESSION[$key];
         unset($_SESSION[$key]);
 
         return $result;

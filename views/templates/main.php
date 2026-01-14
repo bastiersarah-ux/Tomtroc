@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tomtroc</title>
+    <title><?= htmlspecialchars($title) ?></title>
     <link rel="stylesheet" href="./public/tomtroc.css">
 </head>
 
@@ -34,21 +34,24 @@
             <div class="navbar-end">
                 <div class="dropdown min-md:hidden">
                     <button tabindex="0" class="btn btn-square btn-ghost" aria-label="menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-5 w-5 stroke-current">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            class="inline-block h-5 w-5 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
 
                     <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a href="#">Accueil</a></li>
+                        <li><a href="?action=home">Accueil</a></li>
 
-                        <li><a href="#">Nos livres à l'échange</a></li>
-                        <li><a href="#">Messagerie</a></li>
-                        <li><a href="#">Mon compte</a></li>
-                        <li><a href="#">Connexion</a></li>
+                        <li><a href="?action=showbooks">Nos livres à l'échange</a></li>
+                        <li><a href="?action=showthreads">Messagerie</a></li>
+                        <li><a href="?action=showmyaccount">Mon compte</a></li>
+                        <li><a href="?action=showconnectionform">Connexion</a></li>
                     </ul>
                 </div>
             </div>
+        </nav>
     </header>
 
     <main>

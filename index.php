@@ -10,34 +10,34 @@ $action = Utils::request('action', 'home');
 // Try catch global pour gérer les erreurs
 try {
     // Pour chaque action, on appelle le bon contrôleur et la bonne méthode.
-    switch ($action) {
+    switch (strtolower($action)) {
         // Pages accessibles à tous.
         case 'home':
             $bookcontroller = new BookController();
             $bookcontroller->showHome();
             break;
 
-        case 'showBooks':
+        case 'showbooks':
             $bookcontroller = new BookController();
             $bookcontroller->showBooks();
             break;
 
-        case 'showBookDetail':
+        case 'showbookdetail':
             $bookcontroller = new BookController();
             $bookcontroller->showBookDetail();
             break;
 
-        case 'showUserProfile':
+        case 'showuserprofile':
             $userController = new UserController();
             $userController->showUserProfile();
             break;
 
-        case 'showInscriptionForm':
+        case 'showinscriptionform':
             $userController = new UserController();
             $userController->showInscriptionForm();
             break;
 
-        case 'showConnectionForm':
+        case 'showconnectionform':
             $userController = new UserController();
             $userController->showconnectionForm();
             break;
@@ -45,60 +45,60 @@ try {
 
         // Section utilisateur connecté 
 
-        case 'connectUser':
+        case 'connectuser':
             $userController = new UserController();
             $userController->connectUser();
             break;
 
-        case 'registerUser':
+        case 'registeruser':
             $userController = new UserController();
             $userController->registerUser();
             break;
 
-        case 'myAccount':
+        case 'showmyaccount':
             $userController = new UserController();
             $userController->showMyAccount();
             break;
 
-        case 'editMyProfile':
+        case 'editmyprofile':
             $userController = new UserController();
             $userController->editUser();
             break;
 
-        case 'disconnectUser':
+        case 'disconnectuser':
             $userController = new UserController();
             $userController->disconnectUser();
             break;
 
-        case 'editBookForm':
+        case 'editbookform':
             $bookController = new BookController();
             $bookController->showBookForm();
             break;
 
-        case 'editBook':
+        case 'editbook':
             $bookController = new BookController();
             $bookController->addOrUpdateBookForm();
             break;
 
-        case 'deleteBook':
+        case 'deletebook':
             $bookController = new BookController();
             $bookController->deleteBook();
             break;
 
         // Section messagerie
 
-        case 'showThreads':
+        case 'showthreads':
             $threadController = new ThreadController();
             $threadController->showThreads();
             break;
 
-        case 'createThread':
+        case 'createthread':
             $threadController = new ThreadController();
             $threadController->createThread();
             break;
 
 
-        case 'sendMessage':
+        case 'sendmessage':
             $threadController = new ThreadController();
             $threadController->sendMessage();
             break;

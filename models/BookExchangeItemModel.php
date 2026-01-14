@@ -118,9 +118,9 @@ class BookExchangeItemModel
     /**
      * Retourne la photo de profil de l'utilisateur propriétaire du livre.
      *
-     * @return string La photo de profil de l'utilisateur
+     * @return ?string La photo de profil de l'utilisateur
      */
-    public function getProfilePicture(): string
+    public function getProfilePicture(): ?string
     {
         return $this->profilePicture;
     }

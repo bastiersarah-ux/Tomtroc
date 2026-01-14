@@ -5,80 +5,102 @@
  */
 ?>
 
-<h1 class="page-title">Mon compte</h1>
 
 <section class="account-container">
 
     <!-- Bloc profil -->
-    <div class="profile-card">
-        <div class="profile-picture">
-            <img src="<?= $user['profile_picture'] ?>" alt="photo de profil">
-        </div>
-
-        <div class="avatar">
-            <div class="w-24 rounded-xl">
-                <img src="https://img.daisyui.com/images/profile/demo/yellingwoman@192.webp" />
-            </div>
-        </div>
-        <div class="avatar">
-            <div class="w-24 rounded-full">
-                <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
-            </div>
-        </div>
-
-        <a href="#" class="edit-photo">modifier</a>
-
-        <h2 class="username"><?= $user['username'] ?></h2>
-        <p class="member-since">Membre depuis <?= $user['membre_depuis'] ?></p>
-
-        <div class="library-info">
-            <p class="library-title">BIBLIOTHÈQUE</p>
-            <span class="icon">📚</span>
-            <strong><?= $user['nb_livres'] ?> livres</strong>
-        </div>
+    <div>
+        <img src="<?= Utils::getUserPictureUrl($user->getProfilePicture()) ?>" alt="photo de profil" />
     </div>
 
+    <h2>
+        <?= htmlspecialchars($user->getUsername()) ?>
+    </h2>
+
+    <p>
+        Membre depuis
+        <?= Utils::convertDateToFrenchFormat($user->getDateCreation()) ?>
+    </p>
+
+    <p>BIBLIOTHÈQUE</p>
+    <span>📚</span>
+    <strong>
+        <?= htmlspecialchars(count($books)) ?> livre
+        <?= count($books) > 1 ? 's' : '' ?>
+    </strong>
+    </div>
 
     <!-- Bloc informations personnelles -->
-    <form method="POST" action="update_user.php">
 
-        <label for="email">Adresse email</label>
-        <input type="email" id="email" name="email" value="<?= $user['email'] ?>">
+    <form method="POST" action="?action=showMyAccount&id=<?= $user->getId() ?>"></form>
 
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password">
+    <label for="email">Adresse email</label>
+    <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>">
 
-        <label for="pseudo">Pseudo</label>
-        <input type="text" id="username" name="username" value="<?= $user['username'] ?>">
+    <label for="password">Mot de passe</label>
+    <input type="password" id="password" name="password">
 
-        <button type="submit" class="save-btn">Enregistrer</button>
+    <label for="username">Pseudo</label>
+    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user->getUsername()) ?>">
+
+    <button type="submit" class="tomtroc-button grey">Enregistrer</button>
+
     </form>
 
 
     <!-- Tableau des livres -->
-    <tbody>
-        <?php foreach ($books as $book): ?>
+    <table>
+        <thead>
             <tr>
-                <td><img src="<?= $book['photo'] ?>" class="book-picture"></td>
-
-                <td><?= $book['title'] ?></td>
-
-                <td><?= $book['author'] ?></td>
-
-                <td><em><?= $book['description'] ?></em></td>
-
-                <td>
-                    <?php if ($book['disponible']): ?>
-                        <span class="badg- dispo">disponible</span>
-                    <?php else: ?>
-                        <span class="badge-no-dispo">non dispo.</span>
-                    <?php endif; ?>
-                </td>
-
-                <td>
-                    <a href="edit.php?id=<?= $book['id'] ?>" class="edit">Éditer</a>
-                    <a href="delete.php?id=<?= $book['id'] ?>" class="delete">Supprimer</a>
-                </td>
+                <th>Photo</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Statut</th>
+                <th>Description</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
+        </thead>
+
+        <tbody>
+            <?php foreach ($books as $book): ?>
+                <tr>
+                    <td>
+                        <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>" alt="photo du livre">
+                    </td>
+
+                    <td>
+                        <?= htmlspecialchars($book->getTitle()) ?>
+                    </td>
+
+                    <td>
+                        <?= htmlspecialchars($book->getAuthor()) ?>
+                    </td>
+
+                    <td>
+                        <?= htmlspecialchars($book->getStatus()) ?>
+                    </td>
+
+                    <td>
+                        <em>
+                            <?php
+                            $desc = htmlspecialchars($book->getDescription());
+                            echo mb_strlen($desc) > 80
+                                ? mb_substr($desc, 0, 80) . '...'
+                                : $desc;
+                            ?>
+                        </em>
+                    </td>
+
+                    <td>
+                        <a href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
+                        <a href="?action=deletebook&id=<?= $book->getId() ?>">Supprimer</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- Bouton créer un livre -->
+    <a href="editBook.php" class="tomtroc-button principal-green">Créer un livre</a>
+
+</section>

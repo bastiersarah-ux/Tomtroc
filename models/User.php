@@ -8,8 +8,8 @@ class User extends AbstractEntity
     private string $username;
     private string $password;
     private string $email;
-    private string $picture;
-    private string $date;
+    private ?string $picture = null;
+    private DateTime $dateCreation;
 
     /**
      * Setter pour le pseudo.
@@ -69,35 +69,41 @@ class User extends AbstractEntity
      * Setter pour la photo de profil.
      * @param string $picture
      */
-    public function setProfilePicture(string $picture): void
+    public function setProfilePicture(?string $picture): void
     {
         $this->picture = $picture;
     }
 
     /**
      * Getter pour la photo de profil.
-     * @return string
+     * @return ?string
      */
-    public function getProfilePicture(): string
+    public function getProfilePicture(): ?string
     {
         return $this->picture;
     }
 
     /**
-     * Setter pour la date de création du profil d'utilisateur.
-     * @param string $date
+     * Setter pour la date de création. Si la date est une string, on la convertit en DateTime.
+     * @param string|DateTime $dateCreation
+     * @param string $format : le format pour la convertion de la date si elle est une string.
+     * Par défaut, c'est le format de date mysql qui est utilisé. 
      */
-    public function setDateCreation(string $date): void
+    public function setDateCreation(string|DateTime $dateCreation, string $format = 'Y-m-d H:i:s'): void
     {
-        $this->date = $date;
+        if (is_string($dateCreation)) {
+            $dateCreation = DateTime::createFromFormat($format, $dateCreation);
+        }
+        $this->dateCreation = $dateCreation;
     }
 
     /**
-     * Getter pour la date de création du profil d'utilisateur.
-     * @return string
+     * Récupère la date de création.
+     *
+     * @return DateTime|null
      */
-    public function getDateCreation(): string
+    public function getDateCreation(): DateTime
     {
-        return $this->date;
+        return $this->dateCreation;
     }
 }

@@ -25,13 +25,13 @@ class UserManager extends AbstractEntityManager
 
     /**
      * Récupère un user par son pseudo.
-     * @param string $username
+     * @param string $email
      * @return ?User
      */
-    public function getUserByUserName(string $username): ?User
+    public function getUserByEmail(string $email): ?User
     {
-        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profile_picture` FROM user WHERE username = :username";
-        $result = $this->db->query($sql, ['username' => $username]);
+        $sql = "SELECT `id`, `username`, `email`, `password`, `date_creation`, `profile_picture` FROM user WHERE email = :email";
+        $result = $this->db->query($sql, ['email' => $email]);
         $user = $result->fetch();
         if ($user) {
             return new User($user);
@@ -88,7 +88,7 @@ class UserManager extends AbstractEntityManager
 
     public function getUserBySlug(string $slug): ?User
     {
-        $sql = "SELECT * FROM users WHERE slug = :slug";
+        $sql = "SELECT * FROM user WHERE slug = :slug";
         $result = $this->db->query($sql, ['slug' => $slug]);
         $user = $result->fetch();
         if (empty($user)) {

@@ -111,4 +111,26 @@ class Utils
         // Supprime les tirets au début et à la fin
         return trim($text, '-');
     }
+
+    public static function getUserPictureUrl(?string $filename): string
+    {
+        $baseUrl = "./public";
+
+        if (empty($filename)) {
+            return htmlspecialchars($baseUrl . "/img/avatar.webp");
+        }
+
+        return htmlspecialchars($baseUrl . "/upload/users/" . $filename);
+    }
+
+    public static function getBookPictureUrl(?string $filename): string
+    {
+        $baseUrl = "./public";
+
+        if (empty($filename)) {
+            return htmlspecialchars($baseUrl . "/img/coeur.svg");
+        }
+
+        return htmlspecialchars($baseUrl . "/upload/books/" . $filename);
+    }
 }

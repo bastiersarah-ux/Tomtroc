@@ -42,7 +42,7 @@ class BookManager extends AbstractEntityManager
         $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
             FROM `book` b 
             INNER JOIN user u ON u.id = b.id_user
-            WHERE id = :id";
+            WHERE b.id = :id";
         $result = $this->db->query($sql, ['id' => $id]);
         $book = $result->fetch();
         if ($book) {

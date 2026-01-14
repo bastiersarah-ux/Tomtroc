@@ -34,7 +34,7 @@ body {
 
 .h3 {
     font-family: 'Playfair Display';
-    font-size: 28px;
+    font-size: 30px;
     color: #292929;
 }
 
@@ -70,7 +70,7 @@ body {
 
 }
 
-.tomtroc-button.button-grey {
+.tomtroc-button.grey {
     background-color: var(--buttonColor3);
     color: #00AC66;
     border: 1px solid #00AC66;
