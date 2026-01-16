@@ -30,8 +30,8 @@
             <input type="submit" class="tomtroc-button principal-green" value="S'inscrire'" />
         </div>
     </form>
-    <p>Déjà inscrit ? <a href="index.php?action=showconnectionform"
-            style="text-decoration: underline;">Connectez-vous</a>
+    <p>
+        Déjà inscrit ? <a href="index.php?action=showconnectionform">Connectez-vous</a>
     </p>
     <img src="./public/img/connectionform.svg" alt="Bibliothèque" />
 </div>

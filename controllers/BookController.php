@@ -89,7 +89,7 @@ class BookController extends AbstractController
         $errorMessage = $this->getAndClearVariableSession('editBookFormError');
 
         // Récupère l'id du livre dans la requête
-        $idBook = Utils::request('idBook');
+        $idBook = Utils::request('id');
 
         // Détermine si l'on est en création ou modification
         if (empty($idBook)) {
@@ -111,7 +111,8 @@ class BookController extends AbstractController
         $view = new View("BookForm");
         $view->render("editBookForm", [
             'book' => $book,
-            'errorMessage' => $errorMessage
+            'errorMessage' => $errorMessage,
+            'isEdit' => !empty($book)
         ]);
     }
     /**

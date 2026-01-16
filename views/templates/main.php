@@ -21,9 +21,9 @@
 
 <body>
     <header class="header">
-        <nav role="navigation" aria-label="main navigation" class="navbar shadow-sm mobile-nav">
+        <nav role="navigation" aria-label="main navigation" class="navbar">
             <div class="navbar-start">
-                <img class="logo max-md:w-[78px]" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
+                <img class="logo max-sm:w-19.5 md:w-38.75" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
             </div>
 
             <div class="navbar-center">
@@ -32,7 +32,7 @@
 
             <!-- Menu burger (mobile) -->
             <div class="navbar-end">
-                <div class="dropdown min-md:hidden">
+                <div class="dropdown md:hidden">
                     <button tabindex="0" class="btn btn-square btn-ghost" aria-label="menu">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             class="inline-block h-5 w-5 stroke-current">

@@ -26,8 +26,8 @@
             <input type="submit" class="tomtroc-button principal-green" value="Se connecter" />
         </div>
     </form>
-    <p>Pas de compte ? <a href="index.php?action=showinscriptionform"
-            style="text-decoration: underline;">Inscrivez-vous</a>
+    <p>
+        Pas de compte ? <a href="index.php?action=showinscriptionform">Inscrivez-vous</a>
     </p>
     <img src="./public/img/connectionform.svg" alt="Bibliothèque" />
 </div>

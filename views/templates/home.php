@@ -11,7 +11,7 @@
     <!-- <button class="btn rounded-[10px]">Test</button> -->
     <!-- Présentation Tomtroc -->
     <section class="presentation">
-        <h2 style="font-family: 'Playfair Display'; font-size: 30px; color: #000000;">
+        <h2>
             Rejoignez nos lecteurs passionnés
         </h2>
 
@@ -20,7 +20,7 @@
             Nous croyons en la magie du partage de connaissances et d'histoires à travers les livres.
         </p>
         <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria" />
-        <p class="signature" style="text-align: right" ;>Hamza</p>
+        <p class="signature">Hamza</p>
         <a href="?action=showbooks" class="tomtroc-button principal-green">Découvrir</a>
     </section>
 
@@ -68,16 +68,16 @@
         <br>
 
         <div class="flex w-full flex-col">
-            <div class="card rounded-box grid h-20 place-items-center" style="background-color: #FFFFFF;">Inscrivez-vous
+            <div class="card rounded-box grid h-20 place-items-center">Inscrivez-vous
                 gratuitement sur notre plateforme</div>
             <br>
-            <div class=" card rounded-box grid h-20 place-items-center" style="background-color: #FFFFFF;">Ajoutez les
+            <div class=" card rounded-box grid h-20 place-items-center">Ajoutez les
                 livres que vous souhaitez échanger à votre profil.</div>
             <br>
-            <div class=" card rounded-box grid h-20 place-items-center" style="background-color: #FFFFFF;">Parcourez les
+            <div class=" card rounded-box grid h-20 place-items-center">Parcourez les
                 livres disponibles chez d'autres membres.</div>
             <br>
-            <div class=" card rounded-box grid h-20 place-items-center" style="background-color: #FFFFFF;">Proposez un
+            <div class=" card rounded-box grid h-20 place-items-center">Proposez un
                 échange et discutez avec d'autres passionnés de lecture.</div>
         </div>
         <br>
@@ -118,7 +118,7 @@
         </p>
 
         <p>
-            <em class="signature" style="text-align: left" ;>L’équipe TomTroc</em>
+            <em class="signature">L’équipe TomTroc</em>
         </p>
 
         <img src="./public/img/coeur.svg" alt="Coeur" />

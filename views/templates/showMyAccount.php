@@ -92,7 +92,7 @@
                     </td>
 
                     <td>
-                        <a href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
+                        <a href="?action=editbookform&id=<?= $book->edit() ?>">Éditer</a>
                         <a href="?action=deletebook&id=<?= $book->getId() ?>">Supprimer</a>
                     </td>
                 </tr>
