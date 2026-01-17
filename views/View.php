@@ -10,6 +10,8 @@ class View
      */
     private string $title;
 
+    private string $idPage;
+
 
     /**
      * Constructeur. 
@@ -17,6 +19,7 @@ class View
     public function __construct($title)
     {
         $this->title = $title;
+        $this->idPage = strtolower(Utils::request('action', 'home'));
     }
 
     /**
@@ -33,6 +36,7 @@ class View
         // Les deux variables ci-dessous sont utilisées dans le "main.php" qui est le template principal.
         $content = $this->_renderViewFromTemplate($viewPath, $params);
         $title = $this->title;
+        $idPage = $this->idPage;
         ob_start();
         require(MAIN_VIEW_PATH);
         echo ob_get_clean();

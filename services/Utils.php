@@ -23,6 +23,16 @@ class Utils
     }
 
     /**
+     * Vérifie que l'utilisateur est connecté.
+     * @return void
+     */
+    public static function hasUserConnected(): bool
+    {
+        // On vérifie que l'utilisateur est connecté.
+        return !empty($_SESSION['idUser']);
+    }
+
+    /**
      * Redirige vers une URL.
      * @param string $action : l'action que l'on veut faire (correspond aux actions dans le routeur).
      * @param array $params : Facultatif, les paramètres de l'action sous la forme ['param1' => 'valeur1', 'param2' => 'valeur2']

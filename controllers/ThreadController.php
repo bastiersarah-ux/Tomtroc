@@ -85,7 +85,7 @@ class ThreadController extends AbstractController
 
         // Récupère l'id du thread et le contenu du message
         $idThread = Utils::request('idThread');
-        $content  = Utils::request('message');
+        $content = Utils::request('message');
 
         // Paramètres obligatoires (un thread + un message)
         if (empty($idThread) || empty($content)) {

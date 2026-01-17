@@ -5,123 +5,130 @@
  */
 ?>
 
-<title>Home</title>
-
-<div class="home">
-    <!-- <button class="btn rounded-[10px]">Test</button> -->
-    <!-- Présentation Tomtroc -->
-    <section class="presentation">
-        <h2>
+<!-- <button class="btn rounded-[10px]">Test</button> -->
+<!-- Présentation Tomtroc -->
+<article class="presentation">
+    <section id="discover">
+        <h1>
             Rejoignez nos lecteurs passionnés
-        </h2>
+        </h1>
 
-        <p class="presentation.text">
+        <p>
             Donnez une nouvelle vie à vos livres en les échangeant avec d'autres amoureux de la lecture.
             Nous croyons en la magie du partage de connaissances et d'histoires à travers les livres.
         </p>
-        <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria" />
-        <p class="signature">Hamza</p>
         <a href="?action=showbooks" class="tomtroc-button principal-green">Découvrir</a>
     </section>
+    <figure id="discover-image">
+        <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria" />
+        <legend class="signature">Hamza</legend>
+    </figure>
+</article>
 
-    <hr>
+<!-- DERNIERS LIVRES -->
+<article class="lastbooks">
+    <h2>Les derniers livres ajoutés</h2>
 
-    <!-- DERNIERS LIVRES -->
-    <section class="lastbooks">
-        <h3 class="h3">Les derniers livres ajoutés</h3>
-
-        <div>
-            <?php if (!empty($books)): ?>
+    <section>
+        <?php if (!empty($books)): ?>
+            <div class="card-container">
                 <?php foreach ($books as $book): ?>
-                    <article>
-                        <img src="<?= htmlspecialchars($book->getPicture()) ?>" alt="">
-                        <h3><?= htmlspecialchars($book->getTitle()) ?></h3>
-                        <p><?= htmlspecialchars($book->getAuthor()) ?></p>
-                        <small>
-                            Vendu par : <?= htmlspecialchars($book->getUsername()) ?>
-                        </small>
-                    </article>
+                    <div class="card">
+                        <figure>
+                            <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>" alt="<?= $book->getTitle() ?>">
+                        </figure>
+                        <div class="card-body">
+                            <h3 class="title">
+                                <?= htmlspecialchars($book->getTitle()) ?>
+                            </h3>
+                            <span class="subtitle">
+                                <?= htmlspecialchars($book->getAuthor()) ?>
+                            </span>
+                            <legend>
+                                Vendu par :
+                                <?= htmlspecialchars($book->getUsername()) ?>
+                            </legend>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Aucun livre pour le moment.</p>
             <?php endif; ?>
         </div>
-
-        <br>
-
         <a href="?action=showbooks" class="max-md:hidden! tomtroc-button principal-green">
             Voir tous les livres
         </a>
     </section>
+</article>
 
-    <!-- COMMENT CA MARCHE ?. -->
-    <section class="concept">
+<!-- COMMENT CA MARCHE ?. -->
+<article class="concept">
 
-        <img src="./public/img/valeurs.svg" alt="Nos valeurs" />
-        <br>
+    <h2>Comment ça marche ?</h2>
 
-        <h3 class="h3">Comment ça marche ?</h3>
-        <br>
+    <p class="subtitle">
+        Échanger des livres avec TomTroc c’est simple et amusant ! Suivez ces étapes pour
+        commencer :
+    </p>
 
-        <p class="principaltxt">Échanger des livres avec TomTroc c’est simple et amusant ! Suivez ces étapes pour
-            commencer :</p>
-        <br>
-
-        <div class="flex w-full flex-col">
-            <div class="card rounded-box grid h-20 place-items-center">Inscrivez-vous
-                gratuitement sur notre plateforme</div>
-            <br>
-            <div class=" card rounded-box grid h-20 place-items-center">Ajoutez les
-                livres que vous souhaitez échanger à votre profil.</div>
-            <br>
-            <div class=" card rounded-box grid h-20 place-items-center">Parcourez les
-                livres disponibles chez d'autres membres.</div>
-            <br>
-            <div class=" card rounded-box grid h-20 place-items-center">Proposez un
-                échange et discutez avec d'autres passionnés de lecture.</div>
+    <section>
+        <div class="card">
+            Inscrivez-vous
+            gratuitement sur notre plateforme.
         </div>
-        <br>
 
-        <a href=" /index.php?action=showbooks" class="tomtroc-button grey">Voir tous les livres</a>
-        <br>
+        <div class="card">
+            Ajoutez les
+            livres que vous souhaitez échanger à votre profil.
+        </div>
 
+        <div class="card">
+            Parcourez les
+            livres disponibles chez d'autres membres.
+        </div>
+
+        <div class="card">
+            Proposez un
+            échange et discutez avec d'autres passionnés de lecture.
+        </div>
     </section>
 
-    <!-- NOS VALEURS -->
-    <section class="principaltxt">
+    <a href="/index.php?action=showbooks" class="tomtroc-button grey">Voir tous les livres</a>
 
-        <img src="./public/img/valeurs.svg" alt="Nos valeurs" />
+</article>
 
-        <h3 class="h3">Nos valeurs</h3>
+<!-- NOS VALEURS -->
+<article class="valeurs">
+    <figure>
+        <img src="./public/img/valeurs.jpg" alt="Nos valeurs" />
+    </figure>
 
-        <p>
-            Chez TomTroc, nous mettons l’accent sur le partage, la découverte
-            et la communauté. Nos valeurs sont ancrées dans notre passion
-            pour les livres et notre désir de créer des liens entre les lecteurs.
-        </p>
+    <section>
+        <h2>Nos valeurs</h2>
+        <div class="message-container">
+            <p>
+                Chez Tom Troc, nous mettons l'accent sur le partage, la découverte et la communauté.
+                Nos valeurs sont ancrées dans notre passion pour les livres et notre désir de créer des liens entre les
+                lecteurs.
+                Nous croyons en la puissance des histoires pour rassembler les gens et inspirer des conversations
+                enrichissantes.
+            </p>
 
-        <p>
-            Nous croyons en la puissance des histoires pour rassembler les gens
-            et inspirer des conversations enrichissantes.
-        </p>
+            <p>
+                Notre association a été fondée avec une conviction profonde : chaque livre mérite d'être lu et partagé.
+            </p>
 
-        <p>
-            Notre association a été fondée avec une conviction profonde :
-            chaque livre mérite d’être lu et partagé.
-        </p>
+            <p>
+                Nous sommes passionnés par la création d'une plateforme conviviale qui permet aux lecteurs de se
+                connecter,
+                de partager leurs découvertes littéraires et d'échanger des livres qui attendent patiemment sur les
+                étagères.
+            </p>
+        </div>
 
-        <p>
-            Nous sommes passionnés par la création d’une plateforme conviviale
-            qui permet aux lecteurs de se connecter, de partager leurs découvertes
-            littéraires et d’échanger des livres qui attendent patiemment
-            leur prochaine lecture.
-        </p>
-
-        <p>
-            <em class="signature">L’équipe TomTroc</em>
-        </p>
-
-        <img src="./public/img/coeur.svg" alt="Coeur" />
-
+        <div class="signature-container">
+            <legend class="signature">L’équipe TomTroc</legend>
+            <img src="./public/img/coeur.svg" alt="Coeur" />
+        </div>
     </section>
-</div>
+</article>

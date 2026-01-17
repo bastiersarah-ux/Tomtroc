@@ -10,7 +10,7 @@ class BookExchangeItemModel
     private string $title;
     private string $author;
     private string $description;
-    private bool $status;
+    private string $status;
     private ?string $picture;
 
     private int $idUser;
@@ -78,9 +78,9 @@ class BookExchangeItemModel
     /**
      * Retourne le statut du livre.
      *
-     * @return bool Le statut du livre (disponible ou non)
+     * @return string Le statut du livre (disponible ou non)
      */
-    public function getStatus(): bool
+    public function getStatus(): string
     {
         return $this->status;
     }

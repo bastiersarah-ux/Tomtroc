@@ -8,6 +8,17 @@
  *      $content string : le contenu de la page. 
  */
 
+/**
+ * Calcul si la page courante correspond à l'entrée du menu courant. Renvoie la classe active ou une chaine vide
+ * @param mixed $action
+ * @return string
+ */
+function menuClass($action): string
+{
+    $current = Utils::request("action", "home");
+    return $current == $action ? "active" : "";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -21,18 +32,46 @@
 
 <body>
     <header class="header">
-        <nav role="navigation" aria-label="main navigation" class="navbar">
+        <nav role="navigation" aria-label="main navigation" class="navbar max-lg:justify-between">
             <div class="navbar-start">
-                <img class="logo max-sm:w-19.5 md:w-38.75" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
+                <img class="logo" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
             </div>
 
             <div class="navbar-center">
-
+                <ul class="menu menu-horizontal">
+                    <li class="<?= menuClass('home') ?>">
+                        <a href="?action=home">Accueil</a>
+                    </li>
+                    <li class="<?= menuClass('showbooks') ?>">
+                        <a href="?action=showbooks">Nos livres à l'échange</a>
+                    </li>
+                </ul>
             </div>
 
             <!-- Menu burger (mobile) -->
             <div class="navbar-end">
-                <div class="dropdown md:hidden">
+                <ul class="menu menu-horizontal">
+                    <li class="<?= menuClass('showthreads') ?>">
+                        <a href="?action=showthreads">
+                            <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                            Messagerie
+                        </a>
+                    </li>
+                    <?php if (Utils::hasUserConnected()): ?>
+                        <li class="<?= menuClass('showmyaccount') ?>">
+                            <a href="?action=showmyaccount">
+                                <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
+                                Mon compte
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <li>
+                        <a href="?action=<?= Utils::hasUserConnected() ? 'disconnectuser' : 'showconnectionform' ?>">
+                            <?= Utils::hasUserConnected() ? 'Déconnexion' : 'Connexion' ?>
+                        </a>
+                    </li>
+                </ul>
+                <div id="mobile-menu" class="dropdown dropdown-end">
                     <button tabindex="0" class="btn btn-square btn-ghost" aria-label="menu">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             class="inline-block h-5 w-5 stroke-current">
@@ -42,19 +81,39 @@
                     </button>
 
                     <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a href="?action=home">Accueil</a></li>
-
-                        <li><a href="?action=showbooks">Nos livres à l'échange</a></li>
-                        <li><a href="?action=showthreads">Messagerie</a></li>
-                        <li><a href="?action=showmyaccount">Mon compte</a></li>
-                        <li><a href="?action=showconnectionform">Connexion</a></li>
+                        <li class="<?= menuClass('home') ?>">
+                            <a class="p-5" href="?action=home">Accueil</a>
+                        </li>
+                        <li class="<?= menuClass('showbooks') ?>">
+                            <a class="p-5" href="?action=showbooks">Nos livres à l'échange</a>
+                        </li>
+                        <li class="<?= menuClass('showthreads') ?>">
+                            <a class="p-5" href="?action=showthreads">
+                                <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                                Messagerie
+                            </a>
+                        </li>
+                        <?php if (Utils::hasUserConnected()): ?>
+                            <li class="<?= menuClass('showmyaccount') ?>">
+                                <a class="p-5" href="?action=showmyaccount">
+                                    <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
+                                    Mon compte
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        <li>
+                            <a class="p-5"
+                                href="?action=<?= Utils::hasUserConnected() ? 'disconnectuser' : 'showconnectionform' ?>">
+                                <?= Utils::hasUserConnected() ? 'Déconnexion' : 'Connexion' ?>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main>
+    <main id="<?= $idPage ?>">
         <?= $content /* Ici est affiché le contenu réel de la page. */ ?>
     </main>
 

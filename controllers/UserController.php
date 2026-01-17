@@ -68,7 +68,7 @@ class UserController extends AbstractController
 
         // Affiche la page du profil utilisateur
         $view = new View("UserProfile");
-        $view->render("showUserProfile", [
+        $view->render("showMyAccount", [
             'user' => $user,
             'books' => $books,
             'owner' => false
@@ -81,6 +81,7 @@ class UserController extends AbstractController
      */
     public function showInscriptionForm(): void
     {
+        $this->redirectIfConnected();
         $errorMessage = $this->getAndClearVariableSession('inscriptionFormError');
 
         // Affiche la page du profil utilisateur
@@ -96,7 +97,7 @@ class UserController extends AbstractController
      */
     public function showConnectionForm(): void
     {
-        var_dump($_SESSION);
+        $this->redirectIfConnected();
         // On récupère un éventuel message d'erreur
         $errorMessage = $this->getAndClearVariableSession('connectionFormError');
 
@@ -271,5 +272,13 @@ class UserController extends AbstractController
 
         // On redirige vers la page d'accueil
         Utils::redirect("home");
+    }
+
+    private function redirectIfConnected(): void
+    {
+        if (!empty($_SESSION['idUser'])) {
+            // On redirige vers la page du compte utilisateur
+            Utils::redirect("showMyAccount");
+        }
     }
 }

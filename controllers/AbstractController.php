@@ -10,7 +10,7 @@ abstract class AbstractController
     protected function checkIfUserIsConnected(): void
     {
         // On vérifie que l'utilisateur est connecté.
-        if (empty($_SESSION['idUser'])) {
+        if (!Utils::hasUserConnected()) {
             Utils::redirect("showConnectionForm");
         }
     }

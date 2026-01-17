@@ -18,8 +18,8 @@ class BookManager extends AbstractEntityManager
         $params = [];
 
         if (!empty($search)) {
-            $sql = $sql . " WHERE title LIKE %:search%";
-            $params['search'] = $search;
+            $sql = $sql . " WHERE title LIKE ?";
+            $params = ["%$search%"];
         }
 
         $result = $this->db->query($sql, $params);
@@ -28,6 +28,7 @@ class BookManager extends AbstractEntityManager
         while ($book = $result->fetch()) {
             $books[] = new BookExchangeItemModel($book);
         }
+
         return $books;
     }
 

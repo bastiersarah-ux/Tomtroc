@@ -6,6 +6,9 @@
  */
 class Book extends AbstractEntity
 {
+    public const DISPONIBLE = "disponible";
+    public const INDISPONIBLE = "non dispo.";
+
     private int $idUser;
     private string $title = "";
     private string $author = "";
