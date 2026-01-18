@@ -14,35 +14,29 @@ class ThreadController extends AbstractController
     {
         $this->checkIfUserIsConnected();
 
-        $idSelected = Utils::request('idThread');
-
+        $idSelected = Utils::request('id');
+        $idUser = $this->getConnectedUserId();
 
         $threadManager = new ThreadManager();
         $messages = [];
 
-        // if (!empty($idSelected)) {
-        //     $messages = $threadManager->getThreadMessagesById($idThread, $idCurrentUser);
+        $threads = $threadManager->getAllThreads($idUser);
 
-        //     // Si le thread n'existe pas encore, on essaie de le créer
-        //     if (empty($messages)) {
-        //         try {
-        //             $threadManager->addThread($idSelected);
-        //             // Après ajout, on récupère de nouveau les messages
-        //             $messages = $threadManager->getThreadMessagesById($idSelected);
-        //         } catch (\Exception $e) {
-        //             error_log("Erreur lors de la création du thread : " . $e->getMessage());
-        //         }
-        //     }
-        // }
+        if (!empty($idSelected)) {
+            $messages = $threadManager->getThreadMessagesById($idSelected, $idUser);
 
-        // // Récupère la liste de toutes les conversations de l’utilisateur
-        // $threads = $threadManager->getAllThreads($this->getConnectedUserId());
+            // On vérifie que l'id passé en paramètre corresponds à une discussion de l'utilisateur
 
-        // $this->render('threads', [
-        //     'threads' => $threads,
-        //     'idSelected' => $idSelected,
-        //     'messages' => $messages
-        // ]);
+            $currentThread = $this->findThreadById($threads, $idSelected);
+        }
+
+
+        $view = new View("Messagerie");
+        $view->render("thread", [
+            'threads' => $threads,
+            '$messages' => $messages,
+            'current' => $currentThread
+        ]);
     }
 
     /**
@@ -104,5 +98,16 @@ class ThreadController extends AbstractController
         }
 
         Utils::redirect("threads", ['id' => $idThread]);
+    }
+
+    private function findThreadById(array $items, int $id): ?ThreadItemModel
+    {
+        foreach ($items as $element) {
+            if ($id == $element->getIdThread()) {
+                return $element;
+            }
+        }
+
+        return null;
     }
 }

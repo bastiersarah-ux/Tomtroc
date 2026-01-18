@@ -143,4 +143,51 @@ class Utils
 
         return htmlspecialchars($baseUrl . "/upload/books/" . $filename);
     }
+
+    /**
+     * Retourne une chaîne compacte pour une date (format "messenger-like") :
+     * - Même jour  => "HH:mm"
+     * - Même semaine (ISO week) mais pas même jour => jour abrégé (fr) ex: "sam."
+     * - Même année mais pas même semaine => "DD.MM"
+     * - Autre année => "DD.MM.YYYY"
+     *
+     * @param DateTime $date
+     * @return string
+     */
+    public static function formatCompactDate(DateTime $date): string
+    {
+        if (empty($date)) {
+            return "";
+        }
+
+        $now = new DateTime('now', $date->getTimezone());
+
+        // même jour
+        if ($date->format('Y-m-d') === $now->format('Y-m-d')) {
+            return $date->format('H:i');
+        }
+
+        // même semaine (ISO week number + ISO week-year)
+        if ($date->format('W') === $now->format('W') && $date->format('o') === $now->format('o')) {
+            $days = [
+                1 => 'lun.',
+                2 => 'mar.',
+                3 => 'mer.',
+                4 => 'jeu.',
+                5 => 'ven.',
+                6 => 'sam.',
+                7 => 'dim.'
+            ];
+            $dow = (int) $date->format('N');
+            return $days[$dow] ?? $date->format('D');
+        }
+
+        // même année
+        if ($date->format('Y') === $now->format('Y')) {
+            return $date->format('d.m');
+        }
+
+        // année différente
+        return $date->format('d.m.Y');
+    }
 }

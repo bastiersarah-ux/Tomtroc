@@ -1,2 +1,4 @@
 config/config.php
 node_modules
+.devcontainer
+.vscode

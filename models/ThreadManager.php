@@ -54,14 +54,14 @@ class ThreadManager extends AbstractEntityManager
      */
     public function getThreadMessagesById(int $idThread, int $idCurrentUser): array
     {
-        $sql =  "
+        $sql = "
         SELECT
             t.id_user_transmitter,
             t.content,
             t.date_creation,
             u.profile_picture
         FROM thread_message t
-        JOIN users u ON m.id_user_transmitter = u.id
+        JOIN user u ON t.id_user_transmitter = u.id
         WHERE t.id_thread = ( 
             SELECT id 
             FROM thread 

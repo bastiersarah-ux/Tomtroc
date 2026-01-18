@@ -15,7 +15,7 @@ class ThreadMessageItemModel extends AbstractEntityManager
     {
         $this->idUserTransmitter = $line['id_user_transmitter'];
         $this->content = $line['content'];
-        $this->dateCreation = $line['date_creation'];
+        $this->dateCreation = DateTime::createFromFormat('Y-m-d H:i:s', $line['date_creation']) ?? null;
         $this->transmitterPicture = $line['profile_picture'];
     }
 
