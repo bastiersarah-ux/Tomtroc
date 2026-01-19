@@ -15,7 +15,7 @@ function isSelected(ThreadItemModel $item): string
         <?php if (!empty($threads)): ?>
             <?php foreach ($threads as $thread): ?>
                 <li class="thread-item <?= isSelected($thread) ?>">
-                    <a href="?showthreads&id=<?= $thread->getIdThread() ?>">
+                    <a href="?action=showthreads&id=<?= $thread->getIdThread() ?>">
                         <div class="avatar">
                             <div class="rounded-full">
                                 <img src="<?= Utils::getUserPictureUrl($thread->getUserPicture()) ?>"

@@ -21,11 +21,11 @@
                 </span>
             </div>
         <?php endif; ?>
-        <fieldset class="fieldset">
+        <fieldset class="fieldset" autocomplete="on">
             <label class="label" for="email">Adresse email</label>
-            <input class="input" type="text" name="email" id="email" required>
+            <input class="input" type="email" name="email" id="email" autocomplete="username" required>
             <label class="label" for="password">Mot de passe</label>
-            <input class="input" type="password" name="password" id="password" required>
+            <input class="input" type="password" name="password" id="password" autocomplete="current-password" required>
             <input type="submit" class="tomtroc-button principal-green" value="Se connecter" />
         </fieldset>
     </form>

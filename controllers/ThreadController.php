@@ -21,6 +21,7 @@ class ThreadController extends AbstractController
         $messages = [];
 
         $threads = $threadManager->getAllThreads($idUser);
+        $currentThread = null;
 
         if (!empty($idSelected)) {
             $messages = $threadManager->getThreadMessagesById($idSelected, $idUser);
