@@ -60,7 +60,7 @@ class BookManager extends AbstractEntityManager
      */
     public function getBookByIdAndIdUser(int $id, int $idUser): ?Book
     {
-        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book WHERE id = :id AND id_user = :idUser";
+        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user`, `picture` FROM book WHERE id = :id AND id_user = :idUser";
         $result = $this->db->query($sql, ['id' => $id, 'idUser' => $idUser]);
         $book = $result->fetch();
         if ($book) {
@@ -76,7 +76,7 @@ class BookManager extends AbstractEntityManager
      */
     public function getAllBooksbyIdUser(int $idUser): array
     {
-        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user` FROM book WHERE id_user = :idUser";
+        $sql = "SELECT `id`, `title`, `author`, `description`, `status`, `date_creation`, `id_user`, `picture` FROM book WHERE id_user = :idUser";
         $result = $this->db->query($sql, ["idUser" => $idUser]);
         $books = [];
 

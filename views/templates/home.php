@@ -93,7 +93,7 @@
         </div>
     </section>
 
-    <a href="/index.php?action=showbooks" class="tomtroc-button grey">Voir tous les livres</a>
+    <a href="?action=showbooks" class="tomtroc-button grey">Voir tous les livres</a>
 
 </article>
 

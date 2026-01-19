@@ -106,4 +106,37 @@ class User extends AbstractEntity
     {
         return $this->dateCreation;
     }
+
+    public function getTimeSinceCreation(): string
+    {
+        if (!$this->dateCreation instanceof DateTime) {
+            return '';
+        }
+
+        $now = new DateTime();
+        $diff = $now->diff($this->dateCreation);
+
+        $parts = [];
+
+        if ($diff->y > 0) {
+            $parts[] = $diff->y . ' ' . ($diff->y > 1 ? 'ans' : 'an');
+        }
+
+        if ($diff->m > 0) {
+            $parts[] = $diff->m . ' ' . ($diff->m > 1 ? 'mois' : 'mois');
+        }
+
+        if ($diff->d > 0) {
+            $parts[] = $diff->d . ' ' . ($diff->d > 1 ? 'jours' : 'jour');
+        }
+
+        // Si tout est à zéro (inscription aujourd'hui)
+        if (empty($parts)) {
+            return "aujourd'hui";
+        }
+
+        return 'Membre depuis ' . implode(', ', $parts);
+    }
+
+
 }

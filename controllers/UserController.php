@@ -31,7 +31,7 @@ class UserController extends AbstractController
 
         // Affiche la page du profil utilisateur
         $view = new View("MyAccount");
-        $view->render("showMyAccount", [
+        $view->render("showUserProfile", [
             'user' => $user,
             'books' => $books,
             'owner' => true,
@@ -68,7 +68,7 @@ class UserController extends AbstractController
 
         // Affiche la page du profil utilisateur
         $view = new View("UserProfile");
-        $view->render("showMyAccount", [
+        $view->render("showUserProfile", [
             'user' => $user,
             'books' => $books,
             'owner' => false
@@ -220,14 +220,14 @@ class UserController extends AbstractController
         // On vérifie si les champs obligatoires sont remplis
         if (empty($username) || empty($email) || empty($password)) {
             $_SESSION['myAccountError'] = "Tous les champs sont obligatoires.";
-            Utils::redirect('myAccount');
+            Utils::redirect('showmyaccount');
             return;
         }
 
         // On vérifie si l'email est valdie
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['myAccountError'] = "L'adresse email n'est pas valide.";
-            Utils::redirect('myAccount');
+            Utils::redirect('showmyaccount');
             return;
         }
 
