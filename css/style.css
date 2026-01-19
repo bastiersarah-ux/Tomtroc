@@ -925,12 +925,6 @@ body {
     }
 }
 
-.btn-link {
-    &.delete {
-        color: var(--danger);
-    }
-}
-
 #showthreads {
     padding: 0 150px;
     background: var(--headerBackgroundColor);

@@ -129,8 +129,8 @@
                                 </div>
                             </td>
                             <td class="action">
-                                <a class="btn-link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
-                                <a class="btn-link delete" href="?action=deletebook&id=<?= $book->getId() ?>">Supprimer</a>
+                                <a class="link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
+                                <a class="link link-error" href="?action=deletebook&id=<?= $book->getId() ?>">Supprimer</a>
                             </td>
                         <?php endif; ?>
                     </tr>
