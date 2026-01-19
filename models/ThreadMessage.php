@@ -6,27 +6,66 @@
 class ThreadMessage extends AbstractEntity
 {
     private ?DateTime $dateCreation = null;
+    private ?DateTime $dateRead = null;
     private string $content = "";
-    private string $transmitterUserId = "";
-    private string $threadId = "";
+    private string $idUsertransmitter = "";
+    private string $idthread = "";
 
     /**
-     * Setter pour la date de création du message.
-     * @param DateTime $dateCreation : 
-     * @return DateTime
+     * Setter pour la date de création. Si la date est une string, on la convertit en DateTime.
+     * @param string|DateTime $dateCreation
+     * @param string $format : le format pour la convertion de la date si elle est une string.
+     * Par défaut, c'est le format de date mysql qui est utilisé. 
      */
-    public function setDateCreation(DateTime $dateCreation): void
+    public function setDateCreation(string|DateTime $dateCreation, string $format = 'Y-m-d H:i:s'): void
     {
+        $tz = new DateTimeZone('Europe/Paris');
+
+        if (is_string($dateCreation)) {
+            // si les dates en base sont en UTC, préciser UTC à la création
+            $dateCreation = DateTime::createFromFormat($format, $dateCreation, new DateTimeZone('UTC')) ?: null;
+        }
+
+        if ($dateCreation instanceof DateTime) {
+            // convertir l'objet DateTime en Europe/Paris (préserve l'instant)
+            $dateCreation->setTimezone($tz);
+        }
+
         $this->dateCreation = $dateCreation;
     }
 
     /**
-     * Getter pour la date de création du message.
-     * @return DateTime
+     * Récupère la date de création.
+     *
+     * @return DateTime|null
      */
-    public function getDateCreation()
+    public function getDateCreation(): DateTime
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Setter pour la date de création. Si la date est une string, on la convertit en DateTime.
+     * @param string|DateTime $dateCreation
+     * @param string $format : le format pour la convertion de la date si elle est une string.
+     * Par défaut, c'est le format de date mysql qui est utilisé. 
+     */
+    public function setDateRead(string|DateTime $dateRead, string $format = 'Y-m-d H:i:s'): void
+    {
+        if (is_string($dateRead)) {
+            $dateRead = DateTime::createFromFormat($format, $dateRead);
+        }
+        $this->dateRead = $dateRead;
+    }
+
+    /**
+     * Récupère la date de création.
+     *
+     * @return DateTime|null
+     */
+    public function getDateRead(): DateTime
+    {
+        return $this->dateRead;
     }
 
 
@@ -52,35 +91,35 @@ class ThreadMessage extends AbstractEntity
      * Setter pour le transmetteur du message.
      * @param string $transmitterUserId
      */
-    public function setTransmitterUserId(string $transmitterUserId): void
+    public function setIdUserTransmitter(string $transmitterUserId): void
     {
-        $this->transmitterUserId = $transmitterUserId;
+        $this->idUsertransmitter = $transmitterUserId;
     }
 
     /**
      * Getter pour le transmetteur du message.
      * @return string $transmitterUserId
      */
-    public function getTransmitterUserId(): string
+    public function getIdUserTransmitter(): string
     {
-        return $this->transmitterUserId;
+        return $this->idUsertransmitter;
     }
 
     /**
      * Setter pour l'id de la conversation.
      * @param string $threadId
      */
-    public function SetThreadId(string $threadId): void
+    public function SetIdThread(string $threadId): void
     {
-        $this->threadId = $threadId;
+        $this->idthread = $threadId;
     }
 
     /**
      * Getter pour l'id de la conversation.
      * @return string $threadId
      */
-    public function GetThreadId(): string
+    public function GetIdThread(): string
     {
-        return $this->threadId;
+        return $this->idthread;
     }
 }

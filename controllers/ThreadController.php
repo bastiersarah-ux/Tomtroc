@@ -27,7 +27,6 @@ class ThreadController extends AbstractController
             $messages = $threadManager->getThreadMessagesById($idSelected, $idUser);
 
             // On vérifie que l'id passé en paramètre corresponds à une discussion de l'utilisateur
-
             $currentThread = $this->findThreadById($threads, $idSelected);
         }
 
@@ -35,7 +34,7 @@ class ThreadController extends AbstractController
         $view = new View("Messagerie");
         $view->render("thread", [
             'threads' => $threads,
-            '$messages' => $messages,
+            'messages' => $messages,
             'current' => $currentThread
         ]);
     }
@@ -76,7 +75,9 @@ class ThreadController extends AbstractController
      */
     public function sendMessage(): void
     {
-        $this->checkIfUserIsConnected();
+        if (!Utils::hasUserConnected()) {
+            $this->sendJsonResponse(null, 401);
+        }
 
         // Récupère l'id du thread et le contenu du message
         $idThread = Utils::request('idThread');
@@ -84,7 +85,7 @@ class ThreadController extends AbstractController
 
         // Paramètres obligatoires (un thread + un message)
         if (empty($idThread) || empty($content)) {
-            Utils::redirect("threads");
+            $this->sendJsonResponse(null, 401);
             return;
         }
 
@@ -93,12 +94,41 @@ class ThreadController extends AbstractController
 
         try {
             // Enregistre le message en BDD
-            $threadManager->sendMessage($idThread, $this->getConnectedUserId(), $content);
+            $message = $threadManager->sendMessage($idThread, $this->getConnectedUserId(), $content);
+            if (!$message) {
+                $this->sendJsonResponse(null, 500);
+                return;
+            }
+            $this->sendJsonResponse(Utils::formatMessageDateTime($message->getDateCreation()));
         } catch (\Exception $e) {
-            error_log("Erreur lors de l'envoi du message : " . $e->getMessage());
+            // error_log("Erreur lors de l'envoi du message : " . $e->getMessage());
+            $this->sendJsonResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function countNonReadMessage()
+    {
+        if (!Utils::hasUserConnected()) {
+            $this->sendJsonResponse(null, 401);
+            return;
         }
 
-        Utils::redirect("threads", ['id' => $idThread]);
+        try {
+            // Création du thread
+            $threadManager = new ThreadManager();
+            $count = $threadManager->getCountNonReadMessage($this->getConnectedUserId());
+
+            $this->sendJsonResponse($count);
+        } catch (Exception $e) {
+            $this->sendJsonResponse($e->getMessage(), 500);
+        }
+    }
+
+    private function sendJsonResponse(mixed $data, int $responseCode = 200): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code($responseCode);
+        echo json_encode($data);
     }
 
     private function findThreadById(array $items, int $id): ?ThreadItemModel

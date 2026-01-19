@@ -28,6 +28,7 @@ function menuClass($action): string
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title) ?></title>
     <link rel="stylesheet" href="./public/tomtroc.css">
+    <link rel="icon" type="image/x-icon" href="./public/favicon.ico">
 </head>
 
 <body>
@@ -51,13 +52,13 @@ function menuClass($action): string
             <!-- Menu burger (mobile) -->
             <div class="navbar-end">
                 <ul class="menu menu-horizontal">
-                    <li class="<?= menuClass('showthreads') ?>">
-                        <a href="?action=showthreads">
-                            <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
-                            Messagerie
-                        </a>
-                    </li>
                     <?php if (Utils::hasUserConnected()): ?>
+                        <li class="thread-menu <?= menuClass('showthreads') ?>">
+                            <a href="?action=showthreads">
+                                <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                                Messagerie
+                            </a>
+                        </li>
                         <li class="<?= menuClass('showmyaccount') ?>">
                             <a href="?action=showmyaccount">
                                 <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
@@ -87,13 +88,13 @@ function menuClass($action): string
                         <li class="<?= menuClass('showbooks') ?>">
                             <a class="p-5" href="?action=showbooks">Nos livres à l'échange</a>
                         </li>
-                        <li class="<?= menuClass('showthreads') ?>">
-                            <a class="p-5" href="?action=showthreads">
-                                <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
-                                Messagerie
-                            </a>
-                        </li>
                         <?php if (Utils::hasUserConnected()): ?>
+                            <li class="thread-menu <?= menuClass('showthreads') ?>">
+                                <a class="p-5" href="?action=showthreads">
+                                    <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                                    Messagerie
+                                </a>
+                            </li>
                             <li class="<?= menuClass('showmyaccount') ?>">
                                 <a class="p-5" href="?action=showmyaccount">
                                     <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
@@ -123,6 +124,10 @@ function menuClass($action): string
         <p>Tom Troc©</p>
         <img src="./public/img/tt.svg" alt="Logo Tom Troc avec les initiales" />
     </footer>
+
+    <?php if (Utils::hasUserConnected()): ?>
+        <script src="./public/main.js"></script>
+    <?php endif; ?>
 
 </body>
 

@@ -21,7 +21,7 @@ abstract class AbstractController
      */
     protected function getConnectedUserId(): ?int
     {
-        return $_SESSION['idUser'];
+        return Utils::getCurrentIdUser();
     }
 
     /**

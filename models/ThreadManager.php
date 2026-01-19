@@ -59,7 +59,8 @@ class ThreadManager extends AbstractEntityManager
             t.id_user_transmitter,
             t.content,
             t.date_creation,
-            u.profile_picture
+            u.profile_picture,
+            u.username
         FROM thread_message t
         JOIN user u ON t.id_user_transmitter = u.id
         WHERE t.id_thread = ( 
@@ -68,7 +69,7 @@ class ThreadManager extends AbstractEntityManager
             WHERE id = :idThread AND :idCurrentUser IN (id_user1, id_user2)
             LIMIT 1
         )
-        ORDER BY t.date_creation ASC"; // Trie par ordre chronologique.
+        ORDER BY t.date_creation DESC"; // Trie par ordre chronologique.
 
         $result = $this->db->query($sql, [
             'idThread' => $idThread,
@@ -79,7 +80,65 @@ class ThreadManager extends AbstractEntityManager
         while ($line = $result->fetch()) {
             $threads[] = new ThreadMessageItemModel($line);
         }
-        return $threads;
+
+        try {
+            if (!empty($threads)) {
+                $this->markAsRead($idThread, $idCurrentUser);
+            }
+        } finally {
+            return $threads;
+        }
+    }
+
+    public function getCountNonReadMessage(int $idCurrentUser): int
+    {
+        // Chaque message compte avec cette requete
+        $sql = "SELECT count(1)
+                FROM thread_message
+                WHERE id_thread IN (
+                    SELECT id
+                    FROM thread
+                    WHERE id_user1 = $idCurrentUser OR id_user2 = $idCurrentUser
+                ) AND id_user_transmitter <> $idCurrentUser AND date_read IS NULL
+            ";
+        // 1 thread avec au moins un message non lu = 1 message non lu (distinct sur le thread)
+        // $sql = "SELECT DISTINCT tm.id_thread
+        //     FROM thread_message tm
+        //     JOIN thread t ON t.id = tm.id_thread
+        //     WHERE 
+        //         (t.id_user1 = $idCurrentUser OR t.id_user2 = $idCurrentUser)
+        //         AND tm.id_user_transmitter <> $idCurrentUser
+        //         AND tm.date_read IS NULL";
+
+        $result = $this->db->query($sql);
+
+        return (int)$result->fetchColumn();
+    }
+
+    /**
+     * Récupère le fil de conversation individuel (chat 1-to-1).
+     * @param int $idThread : l'id de la conversation.
+     * @return ThreadMessage|null : un tableau d'objets ThreadMessageItemModel.
+     */
+    public function getThreadMessage(int $idThreadMessage): ?ThreadMessage
+    {
+        $sql = "SELECT 
+                t.id,
+                t.id_thread,
+                t.date_creation,
+                t.content,
+                t.id_user_transmitter
+            FROM thread_message t 
+            WHERE id = ?";
+
+        $result = $this->db->query($sql, [$idThreadMessage]);
+        $message = $result->fetch();
+
+        if (empty($message)) {
+            return null;
+        }
+
+        return new ThreadMessage($message);
     }
 
     /**
@@ -90,20 +149,24 @@ class ThreadManager extends AbstractEntityManager
      */
     public function addThread(int $idUser, int $currentIdUser): bool
     {
-        $sql = "INSERT INTO thread (user_id1, user_id2) VALUES (:user1, :user2)";
+        try {
+            $sql = "INSERT INTO thread (user_id1, user_id2) VALUES (:user1, :user2)";
 
-        // Normalisation pour éviter les doublons
-        $id1 = min($idUser, $currentIdUser);
-        $id2 = max($idUser, $currentIdUser);
+            // Normalisation pour éviter les doublons
+            $id1 = min($idUser, $currentIdUser);
+            $id2 = max($idUser, $currentIdUser);
 
-        $result = $this->db->query(
-            $sql,
-            [
-                'user1' => $id1,
-                'user2' => $id2
-            ]
-        );
-        return $result->rowCount() > 0;
+            $result = $this->db->query(
+                $sql,
+                [
+                    'user1' => $id1,
+                    'user2' => $id2
+                ]
+            );
+            return $result->rowCount() > 0;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
 
@@ -112,20 +175,27 @@ class ThreadManager extends AbstractEntityManager
      * @param int $idThread : l'id de la conversation.
      * @param int $idUserTransmitter : l'id de l'utilisateur qui envoie un message.
      * @param string $content: le contenu du message.
-     * @return int $idNewMessage : l’identifiant du message envoyé.
+     * @return ThreadMessage|null le message envoyé.
      */
-    public function sendMessage(int $idThread, int $idUserTransmitter, string $content): bool
+    public function sendMessage(int $idThread, int $idUserTransmitter, string $content): ThreadMessage|false
     {
-        $sql = "INSERT INTO thread_message (id_thread, id_user_transmetteur, content, date_creation) VALUES (:idThread, :idUser, :content, NOW())";
+        $sql = "INSERT INTO thread_message (id_thread, id_user_transmitter, content, date_creation) VALUES (:idThread, :idUser, :content, NOW())";
         $result = $this->db->query(
             $sql,
             [
-                'id_thread' => $idThread,
-                'id_user_transmetteur' => $idUserTransmitter,
+                'idThread' => $idThread,
+                'idUser' => $idUserTransmitter,
                 'content' => $content
             ]
         );
-        return $result->rowCount() > 0;
+
+        if ($result->rowCount() == 0) {
+            return false;
+        }
+
+        $idMessage = $this->db->getPDO()->lastInsertId();
+
+        return $this->getThreadMessage($idMessage);
     }
 
     /**
@@ -148,5 +218,20 @@ class ThreadManager extends AbstractEntityManager
         );
 
         return $result['idThread'] ?? null;
+    }
+
+    private function markAsRead(int $idThread, int $idUser): bool
+    {
+        try {
+            $sql = "UPDATE thread_message 
+                SET date_read = CURRENT_TIMESTAMP()
+                WHERE id_thread = ? AND id_user_transmitter <> ?";
+
+            $this->db->query($sql, [$idThread, $idUser]);
+            return true;
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+            return false;
+        }
     }
 }

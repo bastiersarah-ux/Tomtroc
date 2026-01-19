@@ -16,7 +16,9 @@ class ThreadItemModel extends AbstractEntityManager
         $this->idThread = $line['idThread'];
         $this->username = $line['username'];
         $this->previewLastMessage = $line['previewLastMessage'] ?? null;
+        $tz = new DateTimeZone('Europe/Paris');
         $this->dateLastMessage = DateTime::createFromFormat('Y-m-d H:i:s', $line['dateLastMessage']) ?? null;
+        $this->dateLastMessage?->setTimezone($tz);
         $this->userPicture = $line['userPicture'] ?? null;
     }
 

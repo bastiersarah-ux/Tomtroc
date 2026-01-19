@@ -7,6 +7,7 @@
 class ThreadMessageItemModel extends AbstractEntityManager
 {
     private int $idUserTransmitter;
+    private string $usernameTransmitter;
     private ?string $content;
     private ?DateTime $dateCreation;
     private ?string $transmitterPicture;
@@ -15,7 +16,10 @@ class ThreadMessageItemModel extends AbstractEntityManager
     {
         $this->idUserTransmitter = $line['id_user_transmitter'];
         $this->content = $line['content'];
+        $this->usernameTransmitter = $line['username'];
+        $tz = new DateTimeZone('Europe/Paris');
         $this->dateCreation = DateTime::createFromFormat('Y-m-d H:i:s', $line['date_creation']) ?? null;
+        $this->dateCreation?->setTimezone($tz);
         $this->transmitterPicture = $line['profile_picture'];
     }
 
@@ -25,6 +29,16 @@ class ThreadMessageItemModel extends AbstractEntityManager
      * @return int L'ID de l'utilisateur émetteur
      */
     public function getIdUserTransmitter(): int
+    {
+        return $this->idUserTransmitter;
+    }
+
+    /**
+     * Retourne l'identifiant de l'utilisateur qui transmet le message.
+     *
+     * @return int L'ID de l'utilisateur émetteur
+     */
+    public function getUsernameTransmitter(): int
     {
         return $this->idUserTransmitter;
     }

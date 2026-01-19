@@ -91,9 +91,18 @@ class User extends AbstractEntity
      */
     public function setDateCreation(string|DateTime $dateCreation, string $format = 'Y-m-d H:i:s'): void
     {
+        $tz = new DateTimeZone('Europe/Paris');
+
         if (is_string($dateCreation)) {
-            $dateCreation = DateTime::createFromFormat($format, $dateCreation);
+            // si les dates en base sont en UTC, préciser UTC à la création
+            $dateCreation = DateTime::createFromFormat($format, $dateCreation, new DateTimeZone('UTC')) ?: null;
         }
+
+        if ($dateCreation instanceof DateTime) {
+            // convertir l'objet DateTime en Europe/Paris (préserve l'instant)
+            $dateCreation->setTimezone($tz);
+        }
+
         $this->dateCreation = $dateCreation;
     }
 

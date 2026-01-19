@@ -33,6 +33,16 @@ class Utils
     }
 
     /**
+     * Récupère l'id de l'utilisateur connecté.
+     * @return int
+     */
+    public static function getCurrentIdUser(): int
+    {
+        // On vérifie que l'utilisateur est connecté.
+        return $_SESSION['idUser'];
+    }
+
+    /**
      * Redirige vers une URL.
      * @param string $action : l'action que l'on veut faire (correspond aux actions dans le routeur).
      * @param array $params : Facultatif, les paramètres de l'action sous la forme ['param1' => 'valeur1', 'param2' => 'valeur2']
@@ -160,7 +170,10 @@ class Utils
             return "";
         }
 
-        $now = new DateTime('now', $date->getTimezone());
+        $tz = new DateTimeZone('Europe/Paris');
+        $date->setTimezone($tz);
+
+        $now = new DateTime('now', $tz);
 
         // même jour
         if ($date->format('Y-m-d') === $now->format('Y-m-d')) {
@@ -189,5 +202,31 @@ class Utils
 
         // année différente
         return $date->format('d.m.Y');
+    }
+
+    /**
+     * Retourne une chaîne compacte avec date et heure :
+     * - même année => "dd.mm H:i"
+     * - autre année => "dd.mm.Y H:i"
+     *
+     * @param DateTime $date
+     * @return string
+     */
+    public static function formatMessageDateTime(DateTime $date): string
+    {
+        if (empty($date)) {
+            return "";
+        }
+
+        $tz = new DateTimeZone('Europe/Paris');
+        $date->setTimezone($tz);
+
+        $now = new DateTime('now', $tz);
+
+        if ($date->format('Y') === $now->format('Y')) {
+            return $date->format('d.m H:i');
+        }
+
+        return $date->format('d.m.Y H:i');
     }
 }
