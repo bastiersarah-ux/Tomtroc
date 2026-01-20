@@ -1759,6 +1759,12 @@
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
   }
+  .pl-0\! {
+    padding-left: calc(var(--spacing) * 0) !important;
+  }
+  .text-center {
+    text-align: center;
+  }
   .badge-xs {
     @layer daisyui.l1.l2 {
       --size: calc(var(--size-selector, 0.25rem) * 4);
@@ -2465,10 +2471,17 @@ body {
       gap: 0;
       max-height: 863px;
       background-color: var(--backgroundColor);
+      @media (max-width: 1024px) {
+        max-height: unset;
+      }
       >figure {
         width: 50%;
         height: 100%;
         margin-bottom: 0;
+        @media (max-width: 1024px) {
+          width: 100%;
+          min-height: 449px;
+        }
       }
       .card-content {
         width: 50%;
@@ -2476,6 +2489,9 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        @media (max-width: 1024px) {
+          width: 100%;
+        }
         #bookdetail-bloc {
           display: flex;
           flex-direction: column;
@@ -2516,6 +2532,9 @@ body {
             flex-direction: column;
             align-items: flex-start;
             gap: 16px;
+            @media (max-width: 1024px) {
+              margin-bottom: 3rem;
+            }
             .owner-badge {
               display: inline-flex;
               align-items: center;
@@ -2609,6 +2628,11 @@ body {
     height: 100%;
     padding: 95px 150px;
     gap: 28px;
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: unset;
+      padding: 2rem 1rem;
+    }
     #profile-bloc {
       width: 100%;
       height: 100%;
@@ -2621,9 +2645,6 @@ body {
         justify-content: space-between;
         align-items: center;
         gap: 40px;
-        @media (max-width: 1024px) {
-          width: 160px;
-        }
         figure {
           height: auto;
           width: auto;
@@ -2691,6 +2712,9 @@ body {
             padding-top: 33px;
             &:first-child {
               padding-left: 66px;
+              @media (max-width: 1024px) {
+                padding-left: 26px;
+              }
             }
           }
         }
@@ -2705,6 +2729,9 @@ body {
               padding: 26px 0;
               &:first-child {
                 padding-left: 66px;
+                @media (max-width: 1024px) {
+                  padding-left: 26px;
+                }
               }
               .avatar {
                 width: 78px;
@@ -2754,6 +2781,10 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 508px auto;
     position: relative;
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: unset;
+    }
     #error-alert {
       position: absolute;
       left: 25%;
@@ -3011,6 +3042,9 @@ body {
     width: 1141px;
     max-width: 100%;
     margin: auto;
+    @media (max-width: 1024px) {
+      padding: 2rem 1rem;
+    }
     .page-header {
       padding-bottom: 23px;
       display: flex;
@@ -3024,6 +3058,9 @@ body {
       padding: 56px 50px;
       border-radius: 20px;
       gap: 118px;
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+      }
       #image-preview {
         width: 488px;
         height: 488px;
@@ -3094,6 +3131,16 @@ body {
       color: white;
       border-color: var(--buttonColor2);
     }
+  }
+}
+.principal-green {
+  background-color: var(--buttonColor1);
+  color: #FFFFFF;
+  border-radius: 10px;
+  &:hover {
+    background-color: var(--buttonColor2);
+    color: white;
+    border-color: var(--buttonColor2);
   }
 }
 .badge-message {

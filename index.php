@@ -13,8 +13,8 @@ try {
     switch (strtolower($action)) {
         // Pages accessibles à tous.
         case 'home':
-            $bookcontroller = new BookController();
-            $bookcontroller->showHome();
+            $coreController = new CoreController();
+            $coreController->showHome();
             break;
 
         case 'showbooks':

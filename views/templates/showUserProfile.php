@@ -91,42 +91,61 @@
             </thead>
 
             <tbody>
-                <?php foreach ($books as $book): ?>
-                    <tr>
-                        <td>
-                            <div class="avatar">
-                                <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
-                                    alt="<?= $book->getTitle() ?>">
-                            </div>
-                            </div>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($book->getTitle()) ?>
-
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($book->getAuthor()) ?>
-                        </td>
-                        <td class="description">
-                            <span>
-                                <?= htmlspecialchars($book->getDescription()) ?>
-                            </span>
-                        </td>
-                        <?php if ($owner): ?>
-                            <td class="disponibilite">
-                                <div class="badge <?= $book->getStatus() == Book::INDISPONIBLE ? "error" : "success" ?>">
-                                    <?= $book->getStatus() ?>
+                <?php if (count($books) > 0): ?>
+                    <?php foreach ($books as $book): ?>
+                        <tr>
+                            <td>
+                                <div class="avatar">
+                                    <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
+                                        alt="<?= $book->getTitle() ?>">
+                                </div>
                                 </div>
                             </td>
-                            <td class="action">
-                                <a class="link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
-                                <button class="link link-error" onclick="showModal(<?= $book->getId() ?>);">Supprimer</button>
+                            <td>
+                                <?= htmlspecialchars($book->getTitle()) ?>
 
                             </td>
-                        <?php endif; ?>
+                            <td>
+                                <?= htmlspecialchars($book->getAuthor()) ?>
+                            </td>
+                            <td class="description">
+                                <span>
+                                    <?= htmlspecialchars($book->getDescription()) ?>
+                                </span>
+                            </td>
+                            <?php if ($owner): ?>
+                                <td class="disponibilite">
+                                    <div class="badge <?= $book->getStatus() == Book::INDISPONIBLE ? "error" : "success" ?>">
+                                        <?= $book->getStatus() ?>
+                                    </div>
+                                </td>
+                                <td class="action">
+                                    <a class="link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
+                                    <button class="link link-error" onclick="showModal(<?= $book->getId() ?>);">Supprimer</button>
+
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td class="text-center pl-0!" colspan="100%">Aucun livre dans la bibliothèque</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center pl-0!" colspan="100%">
+                        <a class="btn principal-green btn-ghost" href="?action=editbookform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
+                            </svg>
+                            Ajouter un livre
+                        </a>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
         <?php if ($owner): ?>
             <dialog id="delete-dialog" class="modal">
