@@ -25,7 +25,7 @@ $search = Utils::request("search");
 <!-- LISTE DES LIVRES -->
 <div class="grid">
     <?php foreach ($books as $book): ?>
-        <div class="card">
+        <a class="card" href="?action=showbookdetail&id=<?= $book->getIdBook() ?>">
             <figure>
                 <?php if ($book->getStatus() == Book::INDISPONIBLE): ?>
                     <div class="badge error"><?= $book->getStatus() ?></div>
@@ -44,6 +44,6 @@ $search = Utils::request("search");
                     <?= htmlspecialchars($book->getUsername()) ?>
                 </legend>
             </div>
-        </div>
+        </a>
     <?php endforeach; ?>
 </div>

@@ -58,10 +58,38 @@ function createMessageEl(input) {
 	};
 }
 
+function updatePreview(selected, shortDate, message, timestamp) {
+	const dateEl = selected?.querySelector(".date-last-message");
+	const lastMessageEl = selected?.querySelector(".last-message");
+
+	if (!selected || !dateEl || !lastMessageEl) {
+		return;
+	}
+
+	dateEl.innerHTML = shortDate;
+	lastMessageEl.innerHTML = message;
+	selected.dataset.time = timestamp;
+
+	const listEl = document.querySelector("#threads-container");
+	// Récupère les threads de la liste
+	const children = Array.from(listEl.children);
+
+	// Trie selon data-id
+	children.sort((a, b) => {
+		const idA = parseInt(a.dataset.time, 10);
+		const idB = parseInt(b.dataset.time, 10);
+		return idB - idA; // décroissant
+	});
+
+	// Ré-insère les éléments dans le DOM dans le nouvel ordre
+	children.forEach((child) => listEl.appendChild(child));
+}
+
 (function () {
 	const list = document.querySelector(".messages-list");
 	const input = document.querySelector("#message-input");
 	const btn = document.querySelector("button#submit-message");
+	const selected = document.querySelector(".thread-item.selected");
 
 	const params = new URLSearchParams(window.location.search);
 	const idThread = Number(params.get("id"));
@@ -85,8 +113,9 @@ function createMessageEl(input) {
 				}
 				throw "";
 			}
-			const timestamp = await response.json();
-			infoEl.appendChild(addTimestamp(timestamp));
+			const data = await response.json();
+			infoEl.appendChild(addTimestamp(data.fullDate));
+			updatePreview(selected, data.shortDate, message, data.timestamp);
 		} catch {
 			const { el, button } = addErrorMessage();
 			button.addEventListener("click", function () {

@@ -126,7 +126,7 @@ body {
 
             @media (min-width: 1025px) {
                 .navbar-center {
-                    min-width: 421px;
+                    /* min-width: 421px; */
                     flex: 1;
 
                     .menu {
@@ -586,8 +586,6 @@ body {
     padding-bottom: 80px;
     gap: 42px;
 
-
-
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -606,6 +604,27 @@ body {
         .card {
             width: 100%;
             height: 324px;
+            gap: 0;
+
+            >figure {
+                margin-bottom: 0;
+            }
+
+            .card-body {
+                padding: 0 10px;
+                padding-top: 15px;
+                padding-bottom: 33px;
+                gap: 0;
+                align-items: flex-start;
+
+                .title {
+                    margin-bottom: 0;
+                }
+
+                .subtitle {
+                    margin-bottom: 23px;
+                }
+            }
         }
     }
 

@@ -47,10 +47,20 @@ class ThreadController extends AbstractController
         $this->checkIfUserIsConnected();
 
         // Récupère l'id du contact avec lequel on veut créer la conversation
-        $idThread = Utils::request('idThread');
+        $slug = Utils::request('user');
 
-        if (empty($idThread)) {
-            Utils::redirect("threads");
+        if (empty($slug)) {
+            Utils::redirect("showthreads");
+            return;
+        }
+
+        $userManager = new UserManager();
+        $user = $userManager->getUserBySlug($slug);
+
+
+
+        if (empty($user)) {
+            Utils::redirect("showthreads");
             return;
         }
 
@@ -59,15 +69,14 @@ class ThreadController extends AbstractController
 
         try {
             // Création du thread entre user connecté et l’autre user ($idThread)
-            // $threadManager->addThread($idThread);
+            $idThread = $threadManager->addOrGetThread($user->getId(), $this->getConnectedUserId());
+            Utils::redirect("showthreads", ['id' => $idThread]);
         } catch (\Exception $e) {
             error_log("Erreur création thread : " . $e->getMessage());
             // Redirige vers la liste
-            Utils::redirect("threads");
+            Utils::redirect("showthreads");
             return;
         }
-
-        Utils::redirect("threads", ['id' => $idThread]);
     }
 
     /**
@@ -99,7 +108,14 @@ class ThreadController extends AbstractController
                 $this->sendJsonResponse(null, 500);
                 return;
             }
-            $this->sendJsonResponse(Utils::formatMessageDateTime($message->getDateCreation()));
+
+            $response = (object)[
+                'fullDate' => Utils::formatMessageDateTime($message->getDateCreation()),
+                'shortDate' => Utils::formatCompactDate($message->getDateCreation()),
+                'timestamp' => $message->getDateCreation()->getTimestamp()
+            ];
+
+            $this->sendJsonResponse($response);
         } catch (\Exception $e) {
             // error_log("Erreur lors de l'envoi du message : " . $e->getMessage());
             $this->sendJsonResponse($e->getMessage(), 500);

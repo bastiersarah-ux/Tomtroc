@@ -7,8 +7,9 @@ class ThreadItemModel extends AbstractEntityManager
 {
     private int $idThread;
     private string $username;
-    private ?string $previewLastMessage;
-    private ?DateTime $dateLastMessage;
+    private ?DateTime $dateCreation = null;
+    private ?string $previewLastMessage = null;
+    private ?DateTime $dateLastMessage = null;
     private ?string $userPicture;
 
     public function __construct(array $line)
@@ -16,9 +17,16 @@ class ThreadItemModel extends AbstractEntityManager
         $this->idThread = $line['idThread'];
         $this->username = $line['username'];
         $this->previewLastMessage = $line['previewLastMessage'] ?? null;
+
         $tz = new DateTimeZone('Europe/Paris');
-        $this->dateLastMessage = DateTime::createFromFormat('Y-m-d H:i:s', $line['dateLastMessage']) ?? null;
-        $this->dateLastMessage?->setTimezone($tz);
+        if (!empty($line['dateLastMessage'])) {
+            $this->dateLastMessage = DateTime::createFromFormat('Y-m-d H:i:s', $line['dateLastMessage']) ?? null;
+            $this->dateLastMessage?->setTimezone($tz);
+        }
+        if (!empty($line['date_creation'])) {
+            $this->dateCreation = DateTime::createFromFormat('Y-m-d H:i:s', $line['date_creation']);
+            $this->dateCreation?->setTimezone($tz);
+        }
         $this->userPicture = $line['userPicture'] ?? null;
     }
 
@@ -60,6 +68,16 @@ class ThreadItemModel extends AbstractEntityManager
     public function getDateLastMessage(): ?DateTime
     {
         return $this->dateLastMessage;
+    }
+
+    /**
+     * Retourne la date du dernier message.
+     *
+     * @return DateTime|null La date du dernier message
+     */
+    public function getDateCreation(): ?DateTime
+    {
+        return $this->dateCreation;
     }
 
     /**

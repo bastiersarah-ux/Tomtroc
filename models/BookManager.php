@@ -12,7 +12,7 @@ class BookManager extends AbstractEntityManager
      */
     public function getAllBooks(?string $search): array
     {
-        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, u.`slug`, u.`username`, u.`profile_picture`
             FROM `book` b 
             INNER JOIN user u ON u.id = b.id_user";
         $params = [];
@@ -40,7 +40,7 @@ class BookManager extends AbstractEntityManager
      */
     public function getBookById(int $id): ?BookExchangeItemModel
     {
-        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, u.`slug`, u.`username`, u.`profile_picture`
             FROM `book` b 
             INNER JOIN user u ON u.id = b.id_user
             WHERE b.id = :id";
@@ -104,7 +104,7 @@ class BookManager extends AbstractEntityManager
      */
     public function getLastBooks(): array
     {
-        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, `id_user`, u.`username`, u.`profile_picture`
+        $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, u.`slug`, u.`username`, u.`profile_picture`
             FROM `book` b 
             INNER JOIN user u ON u.id = b.id_user
             ORDER BY date_creation DESC

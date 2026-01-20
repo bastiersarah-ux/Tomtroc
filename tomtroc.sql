@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : dim. 18 jan. 2026 à 09:02
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Hôte : db:3306
+-- Généré le : mar. 20 jan. 2026 à 00:27
+-- Version du serveur : 10.6.24-MariaDB-ubu2204
+-- Version de PHP : 8.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -69,8 +69,17 @@ INSERT INTO `book` (`id`, `title`, `author`, `description`, `status`, `date_crea
 CREATE TABLE `thread` (
   `id` int(11) NOT NULL,
   `id_user1` int(11) NOT NULL,
-  `id_user2` int(11) NOT NULL
+  `id_user2` int(11) NOT NULL,
+  `date_creation` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `thread`
+--
+
+INSERT INTO `thread` (`id`, `id_user1`, `id_user2`, `date_creation`) VALUES
+(1, 1, 4, '2026-01-20 00:07:59'),
+(4, 4, 6, '2026-01-20 00:22:23');
 
 -- --------------------------------------------------------
 
@@ -83,8 +92,17 @@ CREATE TABLE `thread_message` (
   `id_thread` int(11) NOT NULL,
   `date_creation` datetime NOT NULL DEFAULT current_timestamp(),
   `content` longtext NOT NULL,
-  `id_user_transmitter` int(11) NOT NULL
+  `id_user_transmitter` int(11) NOT NULL,
+  `date_read` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `thread_message`
+--
+
+INSERT INTO `thread_message` (`id`, `id_thread`, `date_creation`, `content`, `id_user_transmitter`, `date_read`) VALUES
+(1, 1, '2026-01-18 18:43:39', 'Hello world, je suis un test pour savoir si la messagerie fonctionne bien', 1, '2026-01-20 00:21:36'),
+(2, 1, '2026-01-19 19:09:00', 'Hello world, je suis un test de réponse pour savoir si la messagerie fonctionne bien', 4, '2026-01-19 23:02:02');
 
 -- --------------------------------------------------------
 
@@ -108,15 +126,15 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `date_creation`, `profile_picture`, `slug`) VALUES
 (1, 'j.doe', 'j.doe@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-05 10:10:48', NULL, 'j-doe'),
-(4, 'CamilleClubLit', 'camille.c@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:31:18', NULL, 'camille-club-lit'),
-(5, 'Alexlecture', 'alexl@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:33:22', NULL, 'alex-lecture'),
+(4, 'CamilleClubLit', 'camille.c@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:31:18', 'camilleclublit.jpg', 'camille-club-lit'),
+(5, 'Alexlecture', 'alexl@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:33:22', 'alexlecture.jpg', 'alex-lecture'),
 (6, 'Hugo1990_12', 'hugo1900@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:34:27', NULL, 'hugo1990_12'),
 (7, 'Hamzalecture', 'Hamzalec@troctrom.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:35:21', NULL, 'hamza-lecture'),
 (8, 'Christiane75014', 'christiane75@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:36:29', NULL, 'christiane75014'),
 (9, 'Juju1432', 'juju14@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:37:21', NULL, 'juju1432'),
 (10, 'Lou&Ben50', 'louben50@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:38:38', NULL, 'lou&ben50'),
 (11, 'Lolobzh', 'lolobzh@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:39:39', NULL, 'lolobzh'),
-(12, 'Sas634', 'sas@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:40:34', NULL, 'sas634'),
+(12, 'Sas634', 'sas@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:40:34', 'sas634.jpg', 'sas634'),
 (13, 'Verogo33', 'vero@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:41:40', NULL, 'verogo33'),
 (14, 'AnnikaBrahms', 'annikab@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:42:20', NULL, 'annikabrahms'),
 (15, 'Victoirefabr912', 'victoiref@tomtroc.fr', '$2y$12$LMbmdMM0ErjJ6UY4CLdnWe0NDZlGPoQ/pT0LHi0O/kcYq6X1DcZ9O', '2026-01-13 15:43:29', NULL, 'victoirefabr912'),
@@ -172,13 +190,13 @@ ALTER TABLE `book`
 -- AUTO_INCREMENT pour la table `thread`
 --
 ALTER TABLE `thread`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `thread_message`
 --
 ALTER TABLE `thread_message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `user`

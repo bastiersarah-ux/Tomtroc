@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template pour la page d'un livre en détail (style "fiche").
  */
@@ -40,7 +41,7 @@ function getOrDefault($value, $default)
         <h4>Propriétaire</h4>
         <img src="<?= Utils::getUserPictureUrl($book->getProfilePicture()) ?>"
             alt="Photo de profil de <?= $book->getUsername() ?>">
-        <a href="?action=sendMessage">Envoyer un message</a>
+        <a class="tomtroc-button grey" href="?action=createthread&user=<?= $book->getSlugUser() ?>">Envoyer un message</a>
     </div>
 
 </div>

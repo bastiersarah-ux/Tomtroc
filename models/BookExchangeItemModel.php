@@ -13,7 +13,7 @@ class BookExchangeItemModel
     private string $status;
     private ?string $picture;
 
-    private int $idUser;
+    private string $slugUser;
     private string $username;
     private ?string $profilePicture;
 
@@ -26,7 +26,7 @@ class BookExchangeItemModel
         $this->status = $line['status'];
         $this->picture = $line['picture'];
 
-        $this->idUser = $line['id_user'];
+        $this->slugUser = $line['slug'];
         $this->username = $line['username'];
         $this->profilePicture = $line['profile_picture'];
     }
@@ -88,11 +88,11 @@ class BookExchangeItemModel
     /**
      * Retourne l'identifiant de l'utilisateur propriétaire du livre.
      *
-     * @return int L'ID de l'utilisateur
+     * @return string L'ID de l'utilisateur
      */
-    public function getIdUser(): int
+    public function getSlugUser(): string
     {
-        return $this->idUser;
+        return $this->slugUser;
     }
 
     /**

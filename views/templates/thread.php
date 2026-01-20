@@ -20,7 +20,9 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 	<ul id="threads-container">
 		<?php if (!empty($threads)): ?>
 			<?php foreach ($threads as $thread): ?>
-				<li class="thread-item <?= isSelected($thread) ? "selected" : "" ?>">
+				<li
+					class="thread-item <?= isSelected($thread) ? "selected" : "" ?>"
+					data-time="<?= ($thread->getDateLastMessage() ?? $thread->getDateCreation())?->getTimestamp() ?>">
 					<a href="?action=showthreads&id=<?= $thread->getIdThread() ?>">
 						<div class="avatar">
 							<div class="rounded-full">
@@ -33,7 +35,7 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 								<?= $thread->getUsername() ?>
 							</span>
 							<span class="date-last-message" aria-label="Date dernier message">
-								<?= Utils::formatCompactDate($thread->getDateLastMessage()) ?>
+								<?= !empty($thread->getDateLastMessage()) ? Utils::formatCompactDate($thread->getDateLastMessage()) : "" ?>
 							</span>
 							<span class="last-message" aria-label="Dernier message">
 								<?= $thread->getPreviewLastMessage() ?>

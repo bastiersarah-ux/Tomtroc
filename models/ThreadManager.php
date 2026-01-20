@@ -15,6 +15,7 @@ class ThreadManager extends AbstractEntityManager
     {
         $sql = "SELECT
             t.id AS idThread,
+            t.date_creation,
             u.username,
             u.profile_picture AS userPicture,
             tm.content AS previewLastMessage,
@@ -147,24 +148,34 @@ class ThreadManager extends AbstractEntityManager
      * @param int $currentUserId : l'id de l'utilisateur actuellement connecté.
      * @return int $idNewThread: l'id du nouveau thread.
      */
-    public function addThread(int $idUser, int $currentIdUser): bool
+    public function addOrGetThread(int $idUser, int $currentIdUser): int|false
     {
         try {
-            $sql = "INSERT INTO thread (user_id1, user_id2) VALUES (:user1, :user2)";
+            $sql = "SELECT id 
+                    FROM thread t
+                    WHERE $currentIdUser IN (t.id_user1, t.id_user2) 
+                        AND $idUser IN (t.id_user1, t.id_user2)";
+
+            $result = $this->db->query($sql);
+
+            if ($result->rowCount() > 0) {
+                return (int)$result->fetchColumn();
+            }
+
+            $sql = "INSERT INTO thread (id_user1, id_user2) VALUES (?, ?)";
 
             // Normalisation pour éviter les doublons
             $id1 = min($idUser, $currentIdUser);
             $id2 = max($idUser, $currentIdUser);
 
-            $result = $this->db->query(
-                $sql,
-                [
-                    'user1' => $id1,
-                    'user2' => $id2
-                ]
-            );
-            return $result->rowCount() > 0;
+            $result = $this->db->query($sql, [$id1, $id2]);
+            if ($result->rowCount() == 0) {
+                return false;
+            }
+
+            return $this->db->getPDO()->lastInsertId();
         } catch (Exception $e) {
+            var_dump($e);
             return false;
         }
     }
