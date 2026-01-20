@@ -85,16 +85,13 @@ class BookController extends AbstractController
         // Vérifie que l’utilisateur est connecté
         $this->checkIfUserIsConnected();
 
-        // On récupère une éventuelle erreur liée à la validation du formulaire
-        $errorMessage = $this->getAndClearVariableSession('editBookFormError');
-
         // Récupère l'id du livre dans la requête
         $idBook = Utils::request('id');
 
         // Détermine si l'on est en création ou modification
         if (empty($idBook)) {
             // Mode création
-            $book = null;
+            $book = new Book();
         } else {
             // Mode modification
             $bookManager = new BookManager();
@@ -111,7 +108,6 @@ class BookController extends AbstractController
         $view = new View("BookForm");
         $view->render("editBookForm", [
             'book' => $book,
-            'errorMessage' => $errorMessage,
             'isEdit' => !empty($book)
         ]);
     }
@@ -129,26 +125,27 @@ class BookController extends AbstractController
         $author = Utils::request('author');
         $description = Utils::request('description');
         $status = Utils::request('status');
+        $picture = $_FILES['picture'];
+
+        // Récupération de l'id du livre
+        $idBook = Utils::request('id');
+        $idUser = $this->getConnectedUserId();
 
         // Champs obligatoires
         if (empty($title) || empty($author) || empty($description) || empty($status)) {
-
-            $_SESSION['editBookFormError'] = "Tous les champs sont obligatoires.";
-
-            // On récupère aussi l'id pour renvoyer vers la bonne page (création / modification)
-            $idBook = Utils::request('idBook');
-
-            Utils::redirect("editBookForm", ['idBook' => $idBook]);
+            View::sendErrorAlert("Tous les champs sont obligatoires.");
+            Utils::redirect("editBookForm");
             return;
         }
 
-        // Récupération de l'id du livre
-        $idBook = Utils::request('idBook');
-
-        $bookManager = new BookManager();
-        $idUser = $this->getConnectedUserId();
-
         try {
+            $bookManager = new BookManager();
+            $oldFileName = !empty($idBook)
+                ? $bookManager->getCurrentFilename($idBook, $idUser)
+                : null;
+
+            $filename = Utils::generateNewFilename($picture, $oldFileName);
+
             // Si pas d'id → création
             if (empty($idBook)) {
                 $bookManager->addBook(
@@ -156,37 +153,41 @@ class BookController extends AbstractController
                     $author,
                     $description,
                     $status,
-                    "",
+                    $filename,
                     $idUser
                 );
             } else {
                 // Sinon → mise à jour
 
                 if (!$bookManager->isBookExist($idBook, $idUser)) {
-                    $_SESSION['showMyAccountError'] = "Le livre que vous essayer de modifier n'existe pas";
+                    View::sendErrorAlert("Le livre que vous essayer de modifier n'existe pas");
                     Utils::redirect("showMyAccount");
                     return;
                 }
 
                 $bookManager->updateBook(
+                    $idBook,
                     $title,
-                    $author,
                     $description,
+                    $author,
                     $status,
-                    ""
+                    $filename
                 );
             }
 
+            // On sauvegarde le fichier s'il est passé dans le formulaire
+            Utils::savePicture($picture, $filename, "books");
+
             // Si tout est OK, direction Mon compte
-            Utils::redirect("myAccount");
+            Utils::redirect("showmyaccount");
             return;
         } catch (Exception $e) {
 
             // On stocke l’erreur
-            $_SESSION['editBookFormError'] = $e->getMessage();
+            View::sendErrorAlert($e->getMessage());
 
             // On renvoie vers le formulaire, en gardant l'id du livre
-            Utils::redirect("editBookForm", ['idBook' => $idBook]);
+            Utils::redirect("editBookForm", ['id' => $idBook]);
             return;
         }
     }
@@ -200,11 +201,12 @@ class BookController extends AbstractController
         $this->checkIfUserIsConnected();
 
         // Récupère l'id du livre à supprimer
-        $idBook = Utils::request('idBook');
+        $idBook = Utils::request('id');
 
         // Si pas d'id → redirection directe (pas de suppression possible)
         if (empty($idBook)) {
-            Utils::redirect("myAccount");
+            View::sendErrorAlert("Le livre n'existe pas.");
+            Utils::redirect("showmyaccount");
             return;
         }
         // Vérifie que le livre appartient bien à l'utilisateur
@@ -217,10 +219,17 @@ class BookController extends AbstractController
             return;
         }
 
-        // Suppression du livre
-        $bookManager->deleteBook($idBook);
+        $filename = $book->getPicture();
+
+        try {
+            // Suppression du livre
+            $bookManager->deleteBook($idBook);
+            Utils::deletePicture($filename, "books");
+        } catch (Exception $e) {
+            View::sendErrorAlert($e->getMessage());
+        }
 
         // Redirection vers la page "Mon compte"
-        Utils::redirect("myAccount");
+        Utils::redirect("showmyaccount");
     }
 }

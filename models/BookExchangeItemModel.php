@@ -86,9 +86,9 @@ class BookExchangeItemModel
     }
 
     /**
-     * Retourne l'identifiant de l'utilisateur propriétaire du livre.
+     * Retourne le slug de l'utilisateur propriétaire du livre.
      *
-     * @return string L'ID de l'utilisateur
+     * @return string Le slug de l'utilisateur
      */
     public function getSlugUser(): string
     {

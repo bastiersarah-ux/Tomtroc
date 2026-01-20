@@ -10,38 +10,60 @@ function getOrDefault($value, $default)
 }
 
 ?>
-
-<div>
-    <!-- Image du livre -->
-    <div>
-        <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
-            alt="Couverture du livre <?= htmlspecialchars($book->getTitle()) ?>">
-    </div>
-
-    <!-- Titre et auteur -->
-    <div>
-        <h1>
+<!-- Navigation-->
+<section id="nav-book">
+    <nav aria-label="Fil d’Ariane">
+        <a class="link link-hover" href="?action=showbooks">Nos livres</a> &gt;
+        <span>
             <?= htmlspecialchars($book->getTitle()) ?>
-        </h1>
-        <p>par
-            <?= htmlspecialchars($book->getAuthor()) ?>
-        </p>
-    </div>
+        </span>
+    </nav>
+</section>
 
-    <!-- Description -->
-    <div>
-        <h4>Description</h4>
-        <p>
-            <?= nl2br(htmlspecialchars($book->getDescription())) ?>
-        </p>
-    </div>
+<!-- Image du livre -->
+<section id="picture-bloc">
+    <div class="card lg:card-side">
+        <figure>
+            <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
+                alt="Couverture du livre <?= htmlspecialchars($book->getTitle()) ?>">
+        </figure>
+        <div class="card-content">
+            <!-- Titre et auteur -->
+            <section id="bookdetail-bloc">
+                <h1>
+                    <?= htmlspecialchars($book->getTitle()) ?>
+                </h1>
+                <span class="author">par
+                    <?= htmlspecialchars($book->getAuthor()) ?>
+                </span>
+                <hr>
+                <div class="description">
+                    <h6>Description</h6>
+                    <p>
+                        <?= nl2br(htmlspecialchars($book->getDescription())) ?>
+                    </p>
+                </div>
+                <!-- Propriétaire -->
+                <div id="owner-bloc">
+                    <h6>Propriétaire</h6>
+                    <a class="owner-badge" href="?action=showuserprofile&user=<?= $book->getSlugUser() ?>">
+                        <div class="avatar">
+                            <div class="rounded-full">
+                                <img src="<?= Utils::getUserPictureUrl($book->getProfilePicture()) ?>"
+                                    alt="Photo de profil de <?= $book->getUsername() ?>" class="owner-avatar">
+                            </div>
+                        </div>
+                        <?= htmlspecialchars($book->getUsername()) ?>
+                    </a>
+                </div>
+            </section>
 
-    <!-- Propriétaire -->
-    <div>
-        <h4>Propriétaire</h4>
-        <img src="<?= Utils::getUserPictureUrl($book->getProfilePicture()) ?>"
-            alt="Photo de profil de <?= $book->getUsername() ?>">
-        <a class="tomtroc-button grey" href="?action=createthread&user=<?= $book->getSlugUser() ?>">Envoyer un message</a>
+            <!-- Envoyer un message -->
+            <section id="sendmessage">
+                <a class="tomtroc-button principal-green" href="?action=createthread&user=<?= $book->getSlugUser() ?>">
+                    Envoyer un message
+                </a>
+            </section>
+        </div>
     </div>
-
-</div>
+</section>

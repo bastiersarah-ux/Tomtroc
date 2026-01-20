@@ -34,9 +34,9 @@ function menuClass($action): string
 <body>
     <header class="header">
         <nav role="navigation" aria-label="main navigation" class="navbar max-lg:justify-between">
-            <div class="navbar-start">
+            <a class="navbar-start" href="?action=home">
                 <img class="logo" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
-            </div>
+            </a>
 
             <div class="navbar-center">
                 <ul class="menu menu-horizontal">
@@ -115,6 +115,32 @@ function menuClass($action): string
     </header>
 
     <main id="<?= $idPage ?>">
+        <div id="message-container">
+            <?php if (!empty($successMessage)): ?>
+                <div id="success-alert" role="alert" class="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>
+                        <?= $successMessage ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+            <?php if (!empty($errorMessage)): ?>
+                <div id="error-alert" role="alert" class="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>
+                        <?= $errorMessage ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+        </div>
         <?= $content /* Ici est affiché le contenu réel de la page. */ ?>
     </main>
 
@@ -128,6 +154,24 @@ function menuClass($action): string
     <?php if (Utils::hasUserConnected()): ?>
         <script src="./public/main.js"></script>
     <?php endif; ?>
+
+    <script>
+        (function () {
+            let alert = document.querySelector('#success-alert');
+            if (!!alert) {
+                setTimeout(() => alert.remove(), 3000);
+            }
+        })()
+    </script>
+
+    <script>
+            (function () {
+                let alert = document.querySelector('#error-alert');
+                if (!!alert) {
+                    setTimeout(() => alert.remove(), 3000);
+                }
+            })()
+    </script>
 
 </body>
 

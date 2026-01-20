@@ -33,9 +33,9 @@
         <?php if (!empty($books)): ?>
             <div class="card-container">
                 <?php foreach ($books as $book): ?>
-                    <div class="card">
+                    <a class="card book-card" href="?action=showbookdetail&id=<?= $book->getIdBook() ?>">
                         <figure>
-                            <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>" alt="<?= $book->getTitle() ?>">
+                            <img src=" <?= Utils::getBookPictureUrl($book->getPicture()) ?>" alt="<?= $book->getTitle() ?>">
                         </figure>
                         <div class="card-body">
                             <h3 class="title">
@@ -49,7 +49,7 @@
                                 <?= htmlspecialchars($book->getUsername()) ?>
                             </legend>
                         </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Aucun livre pour le moment.</p>

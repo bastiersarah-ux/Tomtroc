@@ -46,8 +46,21 @@ class UserManager extends AbstractEntityManager
      */
     public function checkIfEmailUsed(string $email): bool
     {
-        $sql = "SELECT 1 FROM user WHERE email = :email";
+        $sql = "SELECT 1 FROM user WHERE UPPER(email) = UPPER(:email)";
         $result = $this->db->query($sql, ['email' => $email]);
+
+        return $result->rowCount() > 0;
+    }
+
+    /**
+     * Vérifie si l'email est déjà utilisé par un autre utilisateur.
+     * @param string $email
+     * @return bool
+     */
+    public function checkIfUsernameUsed(string $username): bool
+    {
+        $sql = "SELECT 1 FROM user WHERE UPPER(username) = UPPER(:username)";
+        $result = $this->db->query($sql, ['username' => $username]);
 
         return $result->rowCount() > 0;
     }
@@ -75,14 +88,16 @@ class UserManager extends AbstractEntityManager
         return $this->db->getPDO()->lastInsertId();
     }
 
-    public function updateUser(string $email, string $username, string $password, string $slug): void
+    public function updateUser(int $id, string $email, string $username, string $password, string $slug, string $filename): void
     {
-        $sql = "UPDATE user SET username = :username, email = :email, password = :password, profile_picture = :profile_picture WHERE id = :id";
+        $sql = "UPDATE user SET username = :username, email = :email, password = :password, profile_picture = :profile_picture, slug = :slug WHERE id = :id";
         $this->db->query($sql, [
             'username' => $username,
             'email' => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-            'slug' => $slug
+            'password' => $password,
+            'slug' => $slug,
+            'profile_picture' => $filename,
+            'id' => $id
         ]);
     }
 

@@ -11,11 +11,12 @@
             <figure>
                 <div class="avatar">
                     <div class="rounded-full">
-                        <img src="<?= Utils::getUserPictureUrl($user->getProfilePicture()) ?>" alt="photo de profil" />
+                        <img id="image-preview" src="<?= Utils::getUserPictureUrl($user->getProfilePicture()) ?>"
+                            alt="photo de profil" />
                     </div>
                 </div>
                 <?php if ($owner): ?>
-                    <btn class="btn btn-link">modifier</btn>
+                    <btn id="btn-image-input" class="link label">modifier</btn>
                 <?php endif; ?>
             </figure>
             <hr>
@@ -50,21 +51,10 @@
         <section id="editprofile-bloc" class="card">
             <h5>Vos informations personnelles</h5>
 
-            <form action="?action=editmyprofile" method="post">
-                <?php if (!empty($errorMessage)): ?>
-                    <div id="connexion-error-alert" role="alert" class="alert alert-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>
-                            <?= $errorMessage ?>
-                        </span>
-                    </div>
-                <?php endif; ?>
-
+            <form action="?action=editmyprofile" method="post" enctype="multipart/form-data">
                 <fieldset class="fieldset">
+                    <input type="file" name="picture" id="image-input-field" accept="image/*" hidden>
+
                     <label class="label" for="email">Adresse email</label>
                     <input class="input" type="email" name="email" id="email" required
                         value="<?= htmlspecialchars($user->getEmail()) ?>">
@@ -130,12 +120,47 @@
                             </td>
                             <td class="action">
                                 <a class="link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
-                                <a class="link link-error" href="?action=deletebook&id=<?= $book->getId() ?>">Supprimer</a>
+                                <button class="link link-error" onclick="showModal(<?= $book->getId() ?>);">Supprimer</button>
+
                             </td>
                         <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php if ($owner): ?>
+            <dialog id="delete-dialog" class="modal">
+                <div class="modal-box">
+                    <h3>Suppression</h3>
+                    <p class="py-4">Êtes-vous sûr·e de vouloir supprimer ce livre ?</p>
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <button class="btn btn-ghost">Non</button>
+                            <a id="delete-anchor" class="btn btn-ghost btn-error" href="#">Oui</a>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+        <?php endif; ?>
     </section>
 </section>
+
+<?php if ($owner): ?>
+    <script src="./public/edit-image.js"></script>
+    <script>
+        function showModal(id) {
+            const dialog = document.getElementById("delete-dialog");
+            dialog.showModal();
+            const anchor = document.querySelector("#delete-anchor");
+            anchor.href = `?action=deletebook&id=${id}`;
+        }
+    </script>
+    <script>
+        (function () {
+            let alert = document.querySelector('#error-alert');
+            if (!!alert) {
+                setTimeout(() => alert.remove(), 3000);
+            }
+        })()
+    </script>
+<?php endif; ?>

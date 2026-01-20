@@ -12,6 +12,18 @@ class View
 
     private string $idPage;
 
+    private const SUCCESS_MESSAGE_KEY = "success";
+    private const ERROR_MESSAGE_KEY = "error";
+
+    public static function sendSuccessAlert(string $message)
+    {
+        $_SESSION[View::SUCCESS_MESSAGE_KEY] = $message;
+    }
+
+    public static function sendErrorAlert(string $message)
+    {
+        $_SESSION[View::ERROR_MESSAGE_KEY] = $message;
+    }
 
     /**
      * Constructeur. 
@@ -37,6 +49,8 @@ class View
         $content = $this->_renderViewFromTemplate($viewPath, $params);
         $title = $this->title;
         $idPage = $this->idPage;
+        $successMessage = $this->getAndClearSuccessMessage();
+        $errorMessage = $this->getAndClearErrorMessage();
         ob_start();
         require(MAIN_VIEW_PATH);
         echo ob_get_clean();
@@ -69,6 +83,40 @@ class View
     private function buildViewPath(string $viewName): string
     {
         return TEMPLATE_VIEW_PATH . $viewName . '.php';
+    }
+
+    /**
+     * Récupère et supprime une variable de la session.
+     * @param string $key La clé de la variable à récupérer
+     * @return ?string La valeur de la variable ou null si elle n'existe pas
+     */
+    protected function getAndClearSuccessMessage(): ?string
+    {
+        if (empty($_SESSION[View::SUCCESS_MESSAGE_KEY])) {
+            return null;
+        }
+
+        $result = $_SESSION[View::SUCCESS_MESSAGE_KEY];
+        unset($_SESSION[View::SUCCESS_MESSAGE_KEY]);
+
+        return $result;
+    }
+
+    /**
+     * Récupère et supprime une variable de la session.
+     * @param string $key La clé de la variable à récupérer
+     * @return ?string La valeur de la variable ou null si elle n'existe pas
+     */
+    protected function getAndClearErrorMessage(): ?string
+    {
+        if (empty($_SESSION[View::ERROR_MESSAGE_KEY])) {
+            return null;
+        }
+
+        $result = $_SESSION[View::ERROR_MESSAGE_KEY];
+        unset($_SESSION[View::ERROR_MESSAGE_KEY]);
+
+        return $result;
     }
 }
 

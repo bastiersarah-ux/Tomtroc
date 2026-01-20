@@ -4,51 +4,55 @@
  * Template pour modifier/créer un livre.
  */
 ?>
-<title><?= $isEdit ? 'Modifier un livre' : 'Créer un livre' ?></title>
 
-<section class="pt-13.5 pb-13.5">
-    <a href="index.php" class="btn btn-link">
-        <img src="./public/img/arrow-left.svg" alt="flèche retour" />
-        <span>retour</span>
-    </a>
-    <h2 class="page-title">
-        <?= $isEdit ? 'Modifier les informations' : 'Ajouter un livre' ?>
-    </h2>
+<article>
+    <title><?= $isEdit ? 'Modifier un livre' : 'Créer un livre' ?></title>
 
-    <div class="card rounded-box bg-white">
-        <form class="container" method="post" action="<?= $isEdit ? 'update.php' : 'store.php' ?>"
-            enctype="multipart/form-data">
+    <section id="page-container">
+        <div class="page-header">
+            <a href="?action=showmyaccount" class="label link link-hover">
+                <img src="./public/img/arrow-left.svg" alt="flèche retour" />
+                <span>retour</span>
+            </a>
+            <h3>
+                <?= $isEdit ? 'Modifier les informations' : 'Ajouter un livre' ?>
+            </h3>
+        </div>
 
+        <form class="card" method="post" action="?action=editbook" enctype="multipart/form-data">
             <!-- Colonne gauche -->
-            <fieldset>
-                <label>Photo</label>
+            <fieldset class="fieldset">
+                <label class="label">Photo</label>
 
-                <img src="<?= htmlspecialchars(Utils::getBookPictureUrl($book->getPicture())) ?>"
+                <img id="image-preview" src="<?= htmlspecialchars(Utils::getBookPictureUrl($book->getPicture())) ?>"
                     alt="photo du livre" />
 
-                <input type="file" name="photo">
+                <btn id="btn-image-input" class="link">Modifler la photo</btn>
+                <input type="file" id="image-input-field" name="picture" accept="image/*" hidden>
             </fieldset>
-
 
             <!-- Colonne droite -->
             <fieldset class="fieldset">
                 <label class="label">Titre</label>
-                <input type="text" class="input w-full" name="title" value="<?= htmlspecialchars($book?->getTitle()) ?>"
+                <input type="text" class="input" name="title" value="<?= htmlspecialchars($book?->getTitle()) ?>"
                     required>
 
                 <label class="label">Auteur</label>
-                <input type="text" class="input w-full" name="author"
-                    value="<?= htmlspecialchars($book?->getAuthor()) ?>" required>
+                <input type="text" class="input" name="author" value="<?= htmlspecialchars($book?->getAuthor()) ?>"
+                    required>
 
                 <label class="label">Description</label>
-                <textarea class="textarea w-full"
-                    name="description"><?= htmlspecialchars($book?->getDescription()) ?></textarea>
+                <textarea class="textarea" name="description"><?= htmlspecialchars($book?->getDescription()) ?>
+                </textarea>
 
                 <label class="label">Disponibilité</label>
-                <select class="select w-full" name="availability">
-                    <option value="disponible" <?= $book?->getStatus() === 'disponible' ? 'selected' : '' ?>>Disponible
+
+                <select class="select" name="status">
+                    <option value="<?= Book::DISPONIBLE ?>" <?= $book?->getStatus() === Book::DISPONIBLE ? 'selected' : '' ?>>
+                        Disponible
                     </option>
-                    <option value="non dispo" <?= $book?->getStatus() === 'non dispo' ? 'selected' : '' ?>>Non disponible
+                    <option value="<?= Book::INDISPONIBLE ?>" <?= $book?->getStatus() === Book::INDISPONIBLE ? 'selected' : '' ?>>
+                        Non disponible
                     </option>
                 </select>
 
@@ -56,11 +60,19 @@
                     <input type="hidden" name="id" value="<?= $book->getId() ?>">
                 <?php endif; ?>
 
-                <button class="tomtroc-button principal-green" type="submit">
-                    <?= $isEdit ? 'Valider' : 'Créer le livre' ?>
-                </button>
+                <input class="tomtroc-button principal-green" type="submit"
+                    value="<?= $isEdit ? 'Valider' : 'Créer le livre' ?>" />
             </fieldset>
-
         </form>
-    </div>
-</section>
+    </section>
+</article>
+
+<script src="./public/edit-image.js"></script>
+<script>
+    (function () {
+        let alert = document.querySelector('#error-alert');
+        if (!!alert) {
+            setTimeout(() => alert.remove(), 3000);
+        }
+    })()
+</script>

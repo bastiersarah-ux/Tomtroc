@@ -154,6 +154,53 @@ class Utils
         return htmlspecialchars($baseUrl . "/upload/books/" . $filename);
     }
 
+    public static function generateNewFilename(mixed $fileInfo, ?string $default = null): ?string
+    {
+        if (empty($fileInfo) || $fileInfo["error"] !== UPLOAD_ERR_OK) {
+            return $default;
+        }
+
+        $extension = pathinfo($fileInfo['name'], PATHINFO_EXTENSION);
+
+        // Nouveau nom unique
+        return uniqid('img_', true) . '.' . $extension;
+    }
+
+    public static function savePicture(mixed $fileInfo, string $filename, string $path): ?string
+    {
+        if (empty($fileInfo) || $fileInfo["error"] !== UPLOAD_ERR_OK || empty($filename) || empty($path)) {
+            return null;
+        }
+
+        if (!in_array($path, ["users", "books"])) {
+            return null;
+        }
+
+        $tmpName = $fileInfo['tmp_name'];
+        $projectRoot = dirname($_SERVER['SCRIPT_FILENAME']);
+
+        // Dossier de destination
+        $destination = "$projectRoot/public/upload/$path/$filename";
+
+        move_uploaded_file($tmpName, $destination);
+
+        return $destination;
+    }
+
+    public static function deletePicture(string $filename, string $path): void
+    {
+        if (empty($filename)) {
+            return;
+        }
+
+        $projectRoot = dirname($_SERVER['SCRIPT_FILENAME']);
+        $destination = "$projectRoot/public/upload/$path/$filename";
+
+        if (file_exists($destination)) {
+            unlink($destination);
+        }
+    }
+
     /**
      * Retourne une chaîne compacte pour une date (format "messenger-like") :
      * - Même jour  => "HH:mm"
