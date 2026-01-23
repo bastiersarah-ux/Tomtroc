@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contrôleur de la partie admin.
+ * Contrôleur de gestion des utilisateurs.
  */
 class UserController extends AbstractController
 {
@@ -297,6 +297,10 @@ class UserController extends AbstractController
         Utils::redirect("home");
     }
 
+    /**
+     * Redirige vers le compte utilisateur si l'utilisateur est déjà connecté.
+     * @return void
+     */
     private function redirectIfConnected(): void
     {
         if (!empty($_SESSION['idUser'])) {

@@ -91,6 +91,11 @@ class ThreadManager extends AbstractEntityManager
         }
     }
 
+    /**
+     * Compte le nombre de messages non lus pour un utilisateur donné.
+     * @param int $idCurrentUser : l'id de l'utilisateur actuellement connecté.
+     * @return int : le nombre de messages non lus.
+     */
     public function getCountNonReadMessage(int $idCurrentUser): int
     {
         // Chaque message compte avec cette requete
@@ -102,24 +107,16 @@ class ThreadManager extends AbstractEntityManager
                     WHERE id_user1 = $idCurrentUser OR id_user2 = $idCurrentUser
                 ) AND id_user_transmitter <> $idCurrentUser AND date_read IS NULL
             ";
-        // 1 thread avec au moins un message non lu = 1 message non lu (distinct sur le thread)
-        // $sql = "SELECT DISTINCT tm.id_thread
-        //     FROM thread_message tm
-        //     JOIN thread t ON t.id = tm.id_thread
-        //     WHERE 
-        //         (t.id_user1 = $idCurrentUser OR t.id_user2 = $idCurrentUser)
-        //         AND tm.id_user_transmitter <> $idCurrentUser
-        //         AND tm.date_read IS NULL";
 
         $result = $this->db->query($sql);
 
-        return (int)$result->fetchColumn();
+        return (int) $result->fetchColumn();
     }
 
     /**
-     * Récupère le fil de conversation individuel (chat 1-to-1).
-     * @param int $idThread : l'id de la conversation.
-     * @return ThreadMessage|null : un tableau d'objets ThreadMessageItemModel.
+     * Récupère un message spécifique par son identifiant.
+     * @param int $idThreadMessage : l'id du message à récupérer.
+     * @return ThreadMessage|null : l'objet ThreadMessage ou null si non trouvé.
      */
     public function getThreadMessage(int $idThreadMessage): ?ThreadMessage
     {
@@ -143,10 +140,10 @@ class ThreadManager extends AbstractEntityManager
     }
 
     /**
-     * Récupère le fil de conversation individuel (chat 1-to-1).
-     * @param int $idUser: l'id de l’utilisateur avec qui on créer une conversation.
-     * @param int $currentUserId : l'id de l'utilisateur actuellement connecté.
-     * @return int $idNewThread: l'id du nouveau thread.
+     * Ajoute ou récupère une conversation existante entre deux utilisateurs.
+     * @param int $idUser : l'id de l'utilisateur avec qui créer ou récupérer une conversation.
+     * @param int $currentIdUser : l'id de l'utilisateur actuellement connecté.
+     * @return int|false : l'id du thread (existant ou créé) ou false en cas d'erreur.
      */
     public function addOrGetThread(int $idUser, int $currentIdUser): int|false
     {
@@ -159,7 +156,7 @@ class ThreadManager extends AbstractEntityManager
             $result = $this->db->query($sql);
 
             if ($result->rowCount() > 0) {
-                return (int)$result->fetchColumn();
+                return (int) $result->fetchColumn();
             }
 
             $sql = "INSERT INTO thread (id_user1, id_user2) VALUES (?, ?)";
@@ -231,6 +228,12 @@ class ThreadManager extends AbstractEntityManager
         return $result['idThread'] ?? null;
     }
 
+    /**
+     * Marque tous les messages d'une conversation comme lus pour un utilisateur donné.
+     * @param int $idThread : l'id de la conversation.
+     * @param int $idUser : l'id de l'utilisateur qui lit les messages.
+     * @return bool : true si la mise à jour a réussi, false sinon.
+     */
     private function markAsRead(int $idThread, int $idUser): bool
     {
         try {

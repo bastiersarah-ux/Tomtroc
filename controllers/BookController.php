@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * Contrôleur de gestion des livres.
+ */
 class BookController extends AbstractController
 {
     /**
-     * Affiche la liste de tous les livres à l'échange avec filtre par titre optionnel via un champ de recherche.
-     * @param $books : les livres à afficher
+     * Affiche la liste de tous les livres disponibles à l'échange avec filtre optionnel par titre.
      * @return void
      */
     public function showBooks(): void
@@ -14,7 +16,7 @@ class BookController extends AbstractController
 
         // Récupère tous les livres à l'échange. 
         $bookManager = new BookManager();
-        $books = $bookManager->getAllBooks($search);
+        $books = $bookManager->getAllBooks($search, $this->getConnectedUserId());
 
         // Envoi à la vue
         $view = new View("Nos livres à l'échange");
@@ -24,9 +26,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * Affiche les détails d'un livre spécifique.
-     * @param $book : le livre à afficher
-     * @param $id : l'id du livre
+     * Affiche les détails complets d'un livre spécifique.
      * @return void
      */
     public function showBookDetail(): void
@@ -159,6 +159,9 @@ class BookController extends AbstractController
             // On sauvegarde le fichier s'il est passé dans le formulaire
             Utils::savePicture($picture, $filename, "books");
 
+            // On stocke l’erreur
+            View::sendSuccessAlert(empty($idBook) ? "Livre ajouté avec succès" : "Livre modifié avec succès");
+
             // Si tout est OK, direction Mon compte
             Utils::redirect("showmyaccount");
             return;
@@ -209,6 +212,8 @@ class BookController extends AbstractController
         } catch (Exception $e) {
             View::sendErrorAlert($e->getMessage());
         }
+
+        View::sendSuccessAlert("Livre supprimé avec succès");
 
         // Redirection vers la page "Mon compte"
         Utils::redirect("showmyaccount");

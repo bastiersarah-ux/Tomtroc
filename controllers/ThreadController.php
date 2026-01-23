@@ -109,7 +109,7 @@ class ThreadController extends AbstractController
                 return;
             }
 
-            $response = (object)[
+            $response = (object) [
                 'fullDate' => Utils::formatMessageDateTime($message->getDateCreation()),
                 'shortDate' => Utils::formatCompactDate($message->getDateCreation()),
                 'timestamp' => $message->getDateCreation()->getTimestamp()
@@ -122,6 +122,10 @@ class ThreadController extends AbstractController
         }
     }
 
+    /**
+     * Retourne le nombre de messages non lus pour l'utilisateur connecté (requête AJAX).
+     * @return void
+     */
     public function countNonReadMessage()
     {
         if (!Utils::hasUserConnected()) {
@@ -140,6 +144,12 @@ class ThreadController extends AbstractController
         }
     }
 
+    /**
+     * Envoie une réponse JSON avec le code HTTP spécifié.
+     * @param mixed $data : les données à encoder en JSON.
+     * @param int $responseCode : le code de réponse HTTP (200 par défaut).
+     * @return void
+     */
     private function sendJsonResponse(mixed $data, int $responseCode = 200): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -147,6 +157,12 @@ class ThreadController extends AbstractController
         echo json_encode($data);
     }
 
+    /**
+     * Recherche une conversation spécifique dans un tableau par son identifiant.
+     * @param array $items : le tableau de conversations.
+     * @param int $id : l'identifiant de la conversation recherchée.
+     * @return ThreadItemModel|null : la conversation trouvée ou null.
+     */
     private function findThreadById(array $items, int $id): ?ThreadItemModel
     {
         foreach ($items as $element) {

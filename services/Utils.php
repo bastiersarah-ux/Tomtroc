@@ -24,7 +24,7 @@ class Utils
 
     /**
      * Vérifie que l'utilisateur est connecté.
-     * @return void
+     * @return bool : true si l'utilisateur est connecté, false sinon.
      */
     public static function hasUserConnected(): bool
     {
@@ -33,13 +33,13 @@ class Utils
     }
 
     /**
-     * Récupère l'id de l'utilisateur connecté.
-     * @return int
+     * Récupère l'identifiant de l'utilisateur actuellement connecté.
+     * @return ?int : l'ID de l'utilisateur connecté.
      */
-    public static function getCurrentIdUser(): int
+    public static function getCurrentIdUser(): ?int
     {
         // On vérifie que l'utilisateur est connecté.
-        return $_SESSION['idUser'];
+        return !empty($_SESSION['idUser']) ? $_SESSION['idUser'] : null;
     }
 
     /**
@@ -132,6 +132,12 @@ class Utils
         return trim($text, '-');
     }
 
+    /**
+     * Génère l'URL de la photo de profil d'un utilisateur.
+     * Retourne l'URL de l'avatar par défaut si aucun fichier n'est fourni.
+     * @param string|null $filename : le nom du fichier de la photo de profil ou null.
+     * @return string : l'URL sécurisée de la photo de profil.
+     */
     public static function getUserPictureUrl(?string $filename): string
     {
         $baseUrl = "./public";
@@ -143,17 +149,29 @@ class Utils
         return htmlspecialchars($baseUrl . "/upload/users/" . $filename);
     }
 
+    /**
+     * Génère l'URL de la photo d'un livre.
+     * Retourne l'URL d'une image par défaut si aucun fichier n'est fourni.
+     * @param string|null $filename : le nom du fichier de la photo du livre ou null.
+     * @return string : l'URL sécurisée de la photo du livre.
+     */
     public static function getBookPictureUrl(?string $filename): string
     {
         $baseUrl = "./public";
 
         if (empty($filename)) {
-            return htmlspecialchars($baseUrl . "/img/coeur.svg");
+            return htmlspecialchars($baseUrl . "/img/no-image.svg");
         }
 
         return htmlspecialchars($baseUrl . "/upload/books/" . $filename);
     }
 
+    /**
+     * Génère un nouveau nom de fichier unique pour un upload.
+     * @param mixed $fileInfo : les informations du fichier uploadé ($_FILES).
+     * @param string|null $default : la valeur par défaut à retourner si l'upload a échoué.
+     * @return string|null : le nouveau nom de fichier unique ou la valeur par défaut.
+     */
     public static function generateNewFilename(mixed $fileInfo, ?string $default = null): ?string
     {
         if (empty($fileInfo) || $fileInfo["error"] !== UPLOAD_ERR_OK) {
@@ -166,7 +184,14 @@ class Utils
         return uniqid('img_', true) . '.' . $extension;
     }
 
-    public static function savePicture(mixed $fileInfo, string $filename, string $path): ?string
+    /**
+     * Sauvegarde une image uploadée dans le répertoire approprié.
+     * @param mixed $fileInfo : les informations du fichier uploadé ($_FILES).
+     * @param string|null $filename : le nom du fichier de destination.
+     * @param string $path : le type de fichier ("users" ou "books").
+     * @return string|null : le chemin complet du fichier sauvegardé ou null en cas d'échec.
+     */
+    public static function savePicture(mixed $fileInfo, ?string $filename, string $path): ?string
     {
         if (empty($fileInfo) || $fileInfo["error"] !== UPLOAD_ERR_OK || empty($filename) || empty($path)) {
             return null;
@@ -187,7 +212,13 @@ class Utils
         return $destination;
     }
 
-    public static function deletePicture(string $filename, string $path): void
+    /**
+     * Supprime une image du répertoire d'upload.
+     * @param string|null $filename : le nom du fichier à supprimer.
+     * @param string $path : le type de fichier ("users" ou "books").
+     * @return void
+     */
+    public static function deletePicture(?string $filename, string $path): void
     {
         if (empty($filename)) {
             return;

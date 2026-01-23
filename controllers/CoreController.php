@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * Contrôleur principal de l'application.
+ */
 class CoreController extends AbstractController
 {
     /**
-     * Affiche la page d'accueil avec les 4 derniers livres à l'échange.
-     * @param $books : les livres à afficher
+     * Affiche la page d'accueil avec les 4 derniers livres disponibles à l'échange.
      * @return void
      */
     public function showHome(): void

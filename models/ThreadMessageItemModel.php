@@ -12,6 +12,11 @@ class ThreadMessageItemModel extends AbstractEntityManager
     private ?DateTime $dateCreation;
     private ?string $transmitterPicture;
 
+    /**
+     * Constructeur de la classe ThreadMessageItemModel.
+     * Initialise un modèle de message avec les données provenant de la base de données.
+     * @param array $line : tableau associatif contenant les données du message.
+     */
     public function __construct(array $line)
     {
         $this->idUserTransmitter = $line['id_user_transmitter'];
@@ -25,8 +30,7 @@ class ThreadMessageItemModel extends AbstractEntityManager
 
     /**
      * Retourne l'identifiant de l'utilisateur qui transmet le message.
-     *
-     * @return int L'ID de l'utilisateur émetteur
+     * @return int : l'ID de l'utilisateur émetteur.
      */
     public function getIdUserTransmitter(): int
     {
@@ -34,9 +38,8 @@ class ThreadMessageItemModel extends AbstractEntityManager
     }
 
     /**
-     * Retourne l'identifiant de l'utilisateur qui transmet le message.
-     *
-     * @return int L'ID de l'utilisateur émetteur
+     * Retourne le nom d'utilisateur de l'utilisateur qui transmet le message.
+     * @return string : le nom d'utilisateur de l'émetteur.
      */
     public function getUsernameTransmitter(): int
     {
@@ -45,8 +48,7 @@ class ThreadMessageItemModel extends AbstractEntityManager
 
     /**
      * Retourne le contenu du message.
-     *
-     * @return string|null Le contenu du message
+     * @return string|null : le contenu textuel du message ou null.
      */
     public function getContent(): ?string
     {
@@ -55,8 +57,7 @@ class ThreadMessageItemModel extends AbstractEntityManager
 
     /**
      * Retourne la date de création du message.
-     *
-     * @return DateTime|null La date de création du message
+     * @return DateTime|null : la date de création du message ou null.
      */
     public function getDateCreation(): ?DateTime
     {
@@ -65,8 +66,7 @@ class ThreadMessageItemModel extends AbstractEntityManager
 
     /**
      * Retourne la photo de profil de l'utilisateur émetteur.
-     *
-     * @return string|null La photo de profil de l'utilisateur
+     * @return string|null : l'URL ou le chemin de la photo de profil ou null.
      */
     public function getTransmitterPicture(): ?string
     {

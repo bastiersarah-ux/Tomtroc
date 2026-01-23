@@ -14,7 +14,7 @@ class Book extends AbstractEntity
     private string $author = "";
     private string $description = "";
     private string $status = "";
-    private string $picture = "";
+    private ?string $picture = null;
     private ?DateTime $dateCreation = null;
 
     /**
@@ -110,18 +110,18 @@ class Book extends AbstractEntity
 
     /**
      * Setter pour l'image du livre.
-     * @param string $picture
+     * @param string|null $picture
      */
-    public function setPicture(string $picture): void
+    public function setPicture(?string $picture): void
     {
         $this->picture = $picture;
     }
 
     /**
      * Getter pour l'image du livre.
-     * @return string
+     * @return string|null
      */
-    public function getPicture(): string
+    public function getPicture(): ?string
     {
         return $this->picture;
     }
@@ -141,7 +141,7 @@ class Book extends AbstractEntity
     }
 
     /**
-     * Récupère la date de création.
+     * Getter pour la date de création.
      *
      * @return DateTime|null
      */

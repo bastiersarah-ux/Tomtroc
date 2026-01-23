@@ -5,6 +5,10 @@
 ?>
 <section class="profile-container">
 
+    <?php if ($owner): ?>
+        <h3>Mon compte</h3>
+    <?php endif; ?>
+
     <!-- Bloc profil -->
     <section id="profile-bloc">
         <div class="card">
@@ -21,9 +25,9 @@
             </figure>
             <hr>
             <div class="card-body">
-                <h4>
+                <h1>
                     <?= htmlspecialchars($user->getUsername()) ?>
-                </h4>
+                </h1>
 
                 <span class="label subtitle">
                     <?= $user->getTimeSinceCreation(); ?>
@@ -31,7 +35,7 @@
 
 
                 <div id="library-info">
-                    <h6>BIBLIOTHÈQUE</h6>
+                    <span class="bloc-title">BIBLIOTHÈQUE</span>
                     <span id="book-number">
                         <figure class="logo">
                             <img src="./public/img/logo-book.svg" alt="Logo livre" />
@@ -39,8 +43,9 @@
                         <?= count($books) ?> livre<?= count($books) > 1 ? 's' : '' ?>
                     </span>
                 </div>
-                <?php if (!$owner): ?>
-                    <a href="?action=sendmessage" class="tomtroc-button grey">Écrire un message</a>
+                <?php if (!$owner && $user->getId() != Utils::getCurrentIdUser()): ?>
+                    <a href="?action=createthread&user=<?= $user->getSlug() ?>" class="tomtroc-button grey">Écrire un
+                        message</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -93,17 +98,16 @@
             <tbody>
                 <?php if (count($books) > 0): ?>
                     <?php foreach ($books as $book): ?>
-                        <tr>
+                        <tr <?php if (!$owner): ?> class="cursor-pointer"
+                                onclick="window.location.href = '?action=showbookdetail&id=<?= $book->getId() ?>'" <?php endif; ?>>
                             <td>
                                 <div class="avatar">
                                     <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
                                         alt="<?= $book->getTitle() ?>">
                                 </div>
-                                </div>
                             </td>
                             <td>
                                 <?= htmlspecialchars($book->getTitle()) ?>
-
                             </td>
                             <td>
                                 <?= htmlspecialchars($book->getAuthor()) ?>
@@ -125,6 +129,39 @@
 
                                 </td>
                             <?php endif; ?>
+                            <td class="mobile-column" colspan="<?= $owner ? 6 : 4 ?>">
+                                <div class="mobile-content">
+                                    <div class="avatar">
+                                        <img src="<?= Utils::getBookPictureUrl($book->getPicture()) ?>"
+                                            alt="<?= $book->getTitle() ?>">
+                                    </div>
+                                    <div class="book-title-authors">
+                                        <span><?= htmlspecialchars($book->getTitle()) ?></span>
+                                        <span>
+                                            <?= htmlspecialchars($book->getAuthor()) ?>
+                                        </span>
+
+                                        <?php if ($owner): ?>
+                                            <div
+                                                class="badge <?= $book->getStatus() == Book::INDISPONIBLE ? "error" : "success" ?>">
+                                                <?= $book->getStatus() ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="description">
+                                        <span>
+                                            <?= htmlspecialchars($book->getDescription()) ?>
+                                        </span>
+                                    </div>
+                                    <?php if ($owner): ?>
+                                        <div class="btn-container">
+                                            <a class="link" href="?action=editbookform&id=<?= $book->getId() ?>">Éditer</a>
+                                            <button class="link link-error"
+                                                onclick="showModal(<?= $book->getId() ?>);">Supprimer</button>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -133,19 +170,21 @@
                     </tr>
                 <?php endif; ?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td class="text-center pl-0!" colspan="100%">
-                        <a class="btn principal-green btn-ghost" href="?action=editbookform">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
-                            </svg>
-                            Ajouter un livre
-                        </a>
-                    </td>
-                </tr>
-            </tfoot>
+            <?php if ($owner): ?>
+                <tfoot>
+                    <tr>
+                        <td class="text-center pl-0!" colspan="100%">
+                            <a class="btn principal-green btn-ghost" href="?action=editbookform">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14" />
+                                </svg>
+                                Ajouter un livre
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            <?php endif; ?>
         </table>
         <?php if ($owner): ?>
             <dialog id="delete-dialog" class="modal">

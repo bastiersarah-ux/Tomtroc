@@ -8,9 +8,10 @@ class BookManager extends AbstractEntityManager
     /**
      * Récupère tous les livres à l'échange.
      * @param string|null $search : recherche par titre.
+     * @param int|null $idUserConnected : filtre les livres qui n'appartiennent pas à l'utilisateur connecté.
      * @return array : un tableau d'objets BookExchangeItemModel.
      */
-    public function getAllBooks(?string $search): array
+    public function getAllBooks(?string $search, ?int $idUserConnected): array
     {
         $sql = "SELECT b.`id`, `title`, `author`, `description`, `status`, b.`date_creation`, `picture`, u.`slug`, u.`username`, u.`profile_picture`
             FROM `book` b 
@@ -18,8 +19,14 @@ class BookManager extends AbstractEntityManager
         $params = [];
 
         if (!empty($search)) {
-            $sql = $sql . " WHERE title LIKE ?";
-            $params = ["%$search%"];
+            $sql = $sql . " WHERE title LIKE :search";
+            $params['search'] = "%$search%";
+        }
+
+        if (!empty($idUserConnected)) {
+            $sql = $sql . (!empty($search) ? " AND " : " WHERE ");
+            $sql = $sql . "u.id <> :idUser";
+            $params['idUser'] = $idUserConnected;
         }
 
         $result = $this->db->query($sql, $params);
@@ -103,11 +110,7 @@ class BookManager extends AbstractEntityManager
     }
 
     /**
-     * Récupère les 4 derniers livres les plus récents parmis tous les livres à l'échange.
-     * $sort = colonne par défaut pour trier (la date)
-     * $order = sens de tri par défaut (descendant)
-     * @param string $sort
-     * @param string $order
+     * Récupère les 4 derniers livres les plus récents parmi tous les livres à l'échange.
      * @return array : un tableau d'objets BookExchangeItemModel.
      */
     public function getLastBooks(): array
@@ -135,11 +138,11 @@ class BookManager extends AbstractEntityManager
      * @param string $description : description du livre.
      * @param string $author : auteur du livre.
      * @param string $status : statut du livre.
-     * @param string $filename : nom du fichier de l'image du livre.
+     * @param string|null $filename : nom du fichier de l'image du livre.
      * @param int $idUser : id de l'utilisateur qui ajoute le livre.
      * @return bool : true si l'ajout a réussi, false sinon.
      */
-    public function addBook(string $title, string $description, string $author, string $status, string $filename, int $idUser): bool
+    public function addBook(string $title, string $description, string $author, string $status, ?string $filename, int $idUser): bool
     {
         $sql = "INSERT INTO book (title, description, author, status, date_creation, id_user, picture) VALUES (:title, :description, :author, :status, NOW(), :idUser, :picture)";
         $result = $this->db->query($sql, [
@@ -161,10 +164,10 @@ class BookManager extends AbstractEntityManager
      * @param string $description : description du livre.
      * @param string $author : auteur du livre.
      * @param string $status : statut du livre.
-     * @param string $filename : nom du fichier de l'image du livre.
+     * @param string|null $filename : nom du fichier de l'image du livre.
      * @return void
      */
-    public function updateBook(int $id, string $title, string $description, string $author, string $status, string $filename): void
+    public function updateBook(int $id, string $title, string $description, string $author, string $status, ?string $filename): void
     {
         $sql = "UPDATE book 
                 SET title = :title, description = :description, author = :author, status = :status, picture = :picture 

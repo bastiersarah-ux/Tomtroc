@@ -38,14 +38,14 @@ function getOrDefault($value, $default)
                 </span>
                 <hr>
                 <div class="description">
-                    <h6>Description</h6>
+                    <span class="bloc-title">Description</span>
                     <p>
                         <?= nl2br(htmlspecialchars($book->getDescription())) ?>
                     </p>
                 </div>
                 <!-- Propriétaire -->
                 <div id="owner-bloc">
-                    <h6>Propriétaire</h6>
+                    <span class="bloc-title">Propriétaire</span>
                     <a class="owner-badge" href="?action=showuserprofile&user=<?= $book->getSlugUser() ?>">
                         <div class="avatar">
                             <div class="rounded-full">

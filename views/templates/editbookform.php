@@ -33,21 +33,20 @@
 
             <!-- Colonne droite -->
             <fieldset class="fieldset">
-                <label class="label">Titre</label>
-                <input type="text" class="input" name="title" value="<?= htmlspecialchars($book?->getTitle()) ?>"
-                    required>
+                <label class="label" for="title">Titre</label>
+                <input id="title" type="text" class="input" name="title"
+                    value="<?= htmlspecialchars($book?->getTitle()) ?>" required>
 
-                <label class="label">Auteur</label>
-                <input type="text" class="input" name="author" value="<?= htmlspecialchars($book?->getAuthor()) ?>"
-                    required>
+                <label class="label" for="author">Auteur</label>
+                <input id="author" type="text" class="input" name="author"
+                    value="<?= htmlspecialchars($book?->getAuthor()) ?>" required>
 
-                <label class="label">Description</label>
-                <textarea class="textarea" name="description"><?= htmlspecialchars($book?->getDescription()) ?>
+                <label class="label" for="descrption">Description</label>
+                <textarea id="descrption" class="textarea" name="description"><?= htmlspecialchars($book?->getDescription()) ?>
                 </textarea>
 
-                <label class="label">Disponibilité</label>
-
-                <select class="select" name="status">
+                <label class="label" for="status">Disponibilité</label>
+                <select id="status" class="select" name="status">
                     <option value="<?= Book::DISPONIBLE ?>" <?= $book?->getStatus() === Book::DISPONIBLE ? 'selected' : '' ?>>
                         Disponible
                     </option>

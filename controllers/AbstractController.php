@@ -4,7 +4,7 @@ abstract class AbstractController
 {
 
     /**
-     * Vérifie que l'utilisateur est connecté.
+     * Vérifie que l'utilisateur est connecté et redirige vers la page de connexion sinon.
      * @return void
      */
     protected function checkIfUserIsConnected(): void
@@ -16,8 +16,8 @@ abstract class AbstractController
     }
 
     /**
-     * Récupère l'ID de l'utilisateur connecté.
-     * @return ?int
+     * Récupère l'identifiant de l'utilisateur actuellement connecté.
+     * @return int|null : l'ID de l'utilisateur connecté ou null.
      */
     protected function getConnectedUserId(): ?int
     {
