@@ -20,8 +20,8 @@
         <a href="?action=showbooks" class="tomtroc-button principal-green">Découvrir</a>
     </section>
     <figure id="discover-image">
-        <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria" />
-        <legend class="signature">Hamza</legend>
+        <img src="./public/img/hamza-nouasria.svg" alt="Hamza Nouasria">
+        <span class="legend signature">Hamza</span>
     </figure>
 </article>
 
@@ -44,10 +44,10 @@
                             <span class="subtitle">
                                 <?= htmlspecialchars($book->getAuthor()) ?>
                             </span>
-                            <legend>
+                            <span class="legend">
                                 Vendu par :
                                 <?= htmlspecialchars($book->getUsername()) ?>
-                            </legend>
+                            </span>
                         </div>
                     </a>
                 <?php endforeach; ?>
@@ -100,7 +100,7 @@
 <!-- NOS VALEURS -->
 <article class="valeurs">
     <figure>
-        <img src="./public/img/valeurs.jpg" alt="Nos valeurs" />
+        <img src="./public/img/valeurs.jpg" alt="Nos valeurs">
     </figure>
 
     <section>
@@ -127,8 +127,8 @@
         </div>
 
         <div class="signature-container">
-            <legend class="signature">L’équipe TomTroc</legend>
-            <img src="./public/img/coeur.svg" alt="Coeur" />
+            <span class="legend signature">L’équipe TomTroc</span>
+            <img src="./public/img/coeur.svg" alt="Coeur">
         </div>
     </section>
 </article>

@@ -19,8 +19,7 @@ $search = Utils::request("search");
                 </g>
             </svg>
             <input type="hidden" name="action" value="showbooks">
-            <input type="search" role="search" name="search" class="grow" placeholder="Rechercher un livre"
-                value="<?= $search ?>" />
+            <input type="search" name="search" class="grow" placeholder="Rechercher un livre" value="<?= $search ?>">
         </label>
     </form>
 
@@ -41,10 +40,10 @@ $search = Utils::request("search");
                     <span class="subtitle">
                         <?= htmlspecialchars($book->getAuthor()) ?>
                     </span>
-                    <legend>
+                    <span class="legend">
                         Vendu par :
                         <?= htmlspecialchars($book->getUsername()) ?>
-                    </legend>
+                    </span>
                 </div>
             </a>
         <?php endforeach; ?>

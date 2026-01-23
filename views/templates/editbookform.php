@@ -6,12 +6,10 @@
 ?>
 
 <article>
-    <title><?= $isEdit ? 'Modifier un livre' : 'Créer un livre' ?></title>
-
     <section id="page-container">
         <div class="page-header">
             <a href="?action=showmyaccount" class="label link link-hover">
-                <img src="./public/img/arrow-left.svg" alt="flèche retour" />
+                <img src="./public/img/arrow-left.svg" alt="flèche retour">
                 <span>retour</span>
             </a>
             <h3>
@@ -25,9 +23,9 @@
                 <label class="label">Photo</label>
 
                 <img id="image-preview" src="<?= htmlspecialchars(Utils::getBookPictureUrl($book->getPicture())) ?>"
-                    alt="photo du livre" />
+                    alt="photo du livre">
 
-                <btn id="btn-image-input" class="link">Modifler la photo</btn>
+                <button id="btn-image-input" class="link">Modifler la photo</button>
                 <input type="file" id="image-input-field" name="picture" accept="image/*" hidden>
             </fieldset>
 
@@ -60,7 +58,7 @@
                 <?php endif; ?>
 
                 <input class="tomtroc-button principal-green" type="submit"
-                    value="<?= $isEdit ? 'Valider' : 'Créer le livre' ?>" />
+                    value="<?= $isEdit ? 'Valider' : 'Créer le livre' ?>">
             </fieldset>
         </form>
     </section>

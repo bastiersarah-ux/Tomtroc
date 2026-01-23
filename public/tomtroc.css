@@ -2192,7 +2192,7 @@ body {
     .label {
       color: var(--labelColor);
     }
-    legend {
+    .legend {
       font-size: 10px;
       font-weight: 400;
       font-style: italic;
@@ -2675,6 +2675,7 @@ body {
           width: auto;
           margin-bottom: 0;
           display: flex;
+          align-items: center;
           flex-direction: column;
           gap: 2px;
           .avatar {
@@ -2763,6 +2764,9 @@ body {
             font-family: 'Inter', sans-serif;
             color: var(--darkgrey);
             font-size: 12px;
+            &.mobile-row {
+              display: none;
+            }
             td {
               vertical-align: middle;
               padding: 26px 0;
@@ -2839,11 +2843,14 @@ body {
               }
             }
             @media (max-width: 1024px) {
-              display: flex;
-              flex-direction: column;
-              border-radius: 20px;
-              border: unset;
-              background: white !important;
+              display: none;
+              &.mobile-row {
+                display: flex;
+                flex-direction: column;
+                border-radius: 20px;
+                border: unset;
+                background: white !important;
+              }
               td {
                 display: none;
                 &.mobile-column {
@@ -2877,10 +2884,8 @@ body {
         &.table-zebra {
           tbody {
             tr {
-              &:nth-child(odd) {
-                background-color: #FFFFFF;
-              }
-              &:nth-child(even) {
+              background-color: #FFFFFF;
+              &:nth-of-type(4n+3) {
                 background-color: #EDF2F6;
               }
             }
@@ -2938,7 +2943,7 @@ body {
       border-radius: 20px;
       padding: 50px 117px;
       gap: 26px;
-      h5 {
+      .title {
         font-family: 'Inter', sans-serif;
         font-size: 16px;
         font-weight: 400;
@@ -3285,6 +3290,15 @@ body {
   font-size: 9px;
   padding-left: 4px;
   padding-right: 5px;
+}
+#error-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: auto;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {

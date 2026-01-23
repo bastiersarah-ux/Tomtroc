@@ -26,17 +26,17 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 						<div class="avatar">
 							<div class="rounded-full">
 								<img src="<?= Utils::getUserPictureUrl($thread->getUserPicture()) ?>"
-									alt="Image de profile de <?= $thread->getUsername() ?>" />
+									alt="Image de profile de <?= $thread->getUsername() ?>">
 							</div>
 						</div>
 						<div class="preview">
-							<span class="username" aria-label="Nom d'utilisateur">
+							<span class="username">
 								<?= $thread->getUsername() ?>
 							</span>
-							<span class="date-last-message" aria-label="Date dernier message">
+							<span class="date-last-message">
 								<?= !empty($thread->getDateLastMessage()) ? Utils::formatCompactDate($thread->getDateLastMessage()) : "" ?>
 							</span>
-							<span class="last-message" aria-label="Dernier message">
+							<span class="last-message">
 								<?= $thread->getPreviewLastMessage() ?>
 							</span>
 						</div>
@@ -52,7 +52,7 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 </section>
 <section id="message-preview" class="<?= !$hasId ? "hide" : "" ?>">
 	<a class="btn btn-link btn-return md:hidden" href="?action=showthreads">
-		<img src="./public/img/arrow-left.svg" />
+		<img src="./public/img/arrow-left.svg" alt="logo retour en arrière">
 		Retour
 	</a>
 
@@ -61,7 +61,7 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 			<div class="avatar">
 				<div class="rounded-full">
 					<img src="<?= Utils::getUserPictureUrl($current->getUserPicture()) ?>"
-						alt="<?= $current->getUsername() ?>" />
+						alt="<?= $current->getUsername() ?>">
 				</div>
 			</div>
 			<span>
@@ -76,7 +76,7 @@ function isMessageOwner(ThreadMessageItemModel $item): bool
 							<div class="avatar">
 								<div class="w-6 rounded-full">
 									<img src="<?= Utils::getUserPictureUrl($message->getTransmitterPicture()) ?>"
-										alt="<?= $message->getUsernameTransmitter() ?>" />
+										alt="<?= $message->getUsernameTransmitter() ?>">
 								</div>
 							</div>
 						<?php endif; ?>

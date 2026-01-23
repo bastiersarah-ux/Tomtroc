@@ -15,7 +15,7 @@
             <input class="input" type="text" name="email" id="email" required>
             <label class="label" for="password">Mot de passe</label>
             <input class="input" type="password" name="password" id="password" required>
-            <input type="submit" class="tomtroc-button principal-green" value="S'inscrire" />
+            <input type="submit" class="tomtroc-button principal-green" value="S'inscrire">
         </fieldset>
     </form>
     <p class="link-container">
@@ -23,5 +23,5 @@
     </p>
 </section>
 <figure>
-    <img src="./public/img/connectionform.svg" alt="Bibliothèque" />
+    <img src="./public/img/connectionform.svg" alt="Bibliothèque">
 </figure>

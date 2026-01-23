@@ -16,11 +16,11 @@
                 <div class="avatar">
                     <div class="rounded-full">
                         <img id="image-preview" src="<?= Utils::getUserPictureUrl($user->getProfilePicture()) ?>"
-                            alt="photo de profil" />
+                            alt="photo de profil">
                     </div>
                 </div>
                 <?php if ($owner): ?>
-                    <btn id="btn-image-input" class="link label">modifier</btn>
+                    <button id="btn-image-input" class="link label">modifier</button>
                 <?php endif; ?>
             </figure>
             <hr>
@@ -37,9 +37,7 @@
                 <div id="library-info">
                     <span class="bloc-title">BIBLIOTHÈQUE</span>
                     <span id="book-number">
-                        <figure class="logo">
-                            <img src="./public/img/logo-book.svg" alt="Logo livre" />
-                        </figure>
+                        <img class="logo" src="./public/img/logo-book.svg" alt="Logo livre">
                         <?= count($books) ?> livre<?= count($books) > 1 ? 's' : '' ?>
                     </span>
                 </div>
@@ -54,7 +52,7 @@
 
     <?php if ($owner): ?>
         <section id="editprofile-bloc" class="card">
-            <h5>Vos informations personnelles</h5>
+            <span class="title">Vos informations personnelles</span>
 
             <form action="?action=editmyprofile" method="post" enctype="multipart/form-data">
                 <fieldset class="fieldset">
@@ -72,7 +70,7 @@
                     <input class="input" type="text" name="username" id="username" required
                         value="<?= htmlspecialchars($user->getUsername()) ?>">
 
-                    <input type="submit" class="tomtroc-button grey" value="Enregistrer" />
+                    <input type="submit" class="tomtroc-button grey" value="Enregistrer">
                 </fieldset>
             </form>
         </section>
@@ -129,6 +127,8 @@
 
                                 </td>
                             <?php endif; ?>
+                        </tr>
+                        <tr class="mobile-row">
                             <td class="mobile-column" colspan="<?= $owner ? 6 : 4 ?>">
                                 <div class="mobile-content">
                                     <div class="avatar">
@@ -136,14 +136,16 @@
                                             alt="<?= $book->getTitle() ?>">
                                     </div>
                                     <div class="book-title-authors">
-                                        <span><?= htmlspecialchars($book->getTitle()) ?></span>
+                                        <span>
+                                            <?= htmlspecialchars($book->getTitle()) ?>
+                                        </span>
                                         <span>
                                             <?= htmlspecialchars($book->getAuthor()) ?>
                                         </span>
 
                                         <?php if ($owner): ?>
-                                            <div
-                                                class="badge <?= $book->getStatus() == Book::INDISPONIBLE ? "error" : "success" ?>">
+                                            <div class="badge <?= $book->getStatus() == Book::INDISPONIBLE ? "error" : "success" ?>
+                                    ">
                                                 <?= $book->getStatus() ?>
                                             </div>
                                         <?php endif; ?>
@@ -166,14 +168,14 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td class="text-center pl-0!" colspan="100%">Aucun livre dans la bibliothèque</td>
+                        <td class="text-center pl-0!" colspan="<?= $owner ? 6 : 4 ?>">Aucun livre dans la bibliothèque</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
             <?php if ($owner): ?>
                 <tfoot>
                     <tr>
-                        <td class="text-center pl-0!" colspan="100%">
+                        <td class="text-center pl-0!" colspan="<?= $owner ? 6 : 4 ?>">
                             <a class="btn principal-green btn-ghost" href="?action=editbookform">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
@@ -189,7 +191,7 @@
         <?php if ($owner): ?>
             <dialog id="delete-dialog" class="modal">
                 <div class="modal-box">
-                    <h3>Suppression</h3>
+                    <h1>Suppression</h1>
                     <p class="py-4">Êtes-vous sûr·e de vouloir supprimer ce livre ?</p>
                     <div class="modal-action">
                         <form method="dialog">

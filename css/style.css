@@ -342,7 +342,7 @@ body {
             color: var(--labelColor);
         }
 
-        legend {
+        .legend {
             font-size: 10px;
             font-weight: 400;
             font-style: italic;
@@ -931,6 +931,7 @@ body {
                     width: auto;
                     margin-bottom: 0;
                     display: flex;
+                    align-items: center;
                     flex-direction: column;
                     gap: 2px;
 
@@ -1041,6 +1042,11 @@ body {
                         color: var(--darkgrey);
                         font-size: 12px;
 
+                        &.mobile-row {
+                            display: none;
+                        }
+
+
                         td {
                             vertical-align: middle;
                             padding: 26px 0;
@@ -1133,11 +1139,15 @@ body {
                         }
 
                         @media (max-width: 1024px) {
-                            display: flex;
-                            flex-direction: column;
-                            border-radius: 20px;
-                            border: unset;
-                            background: white !important;
+                            display: none;
+
+                            &.mobile-row {
+                                display: flex;
+                                flex-direction: column;
+                                border-radius: 20px;
+                                border: unset;
+                                background: white !important;
+                            }
 
                             td {
                                 display: none;
@@ -1180,11 +1190,9 @@ body {
                 &.table-zebra {
                     tbody {
                         tr {
-                            &:nth-child(odd) {
-                                background-color: #FFFFFF;
-                            }
+                            background-color: #FFFFFF;
 
-                            &:nth-child(even) {
+                            &:nth-of-type(4n+3) {
                                 background-color: #EDF2F6;
                             }
                         }
@@ -1254,7 +1262,7 @@ body {
             padding: 50px 117px;
             gap: 26px;
 
-            h5 {
+            .title {
                 font-family: 'Inter', sans-serif;
                 font-size: 16px;
                 font-weight: 400;
@@ -1674,4 +1682,14 @@ body {
     font-size: 9px;
     padding-left: 4px;
     padding-right: 5px;
+}
+
+#error-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: auto;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
 }

@@ -33,9 +33,9 @@ function menuClass($action): string
 
 <body>
     <header class="header">
-        <nav role="navigation" aria-label="main navigation" class="navbar max-lg:justify-between">
+        <nav aria-label="main navigation" class="navbar max-lg:justify-between">
             <a class="navbar-start" href="?action=home">
-                <img class="logo" src="./public/img/logo.svg" alt="Logo Tom Troc entier" />
+                <img class="logo" src="./public/img/logo.svg" alt="Logo Tom Troc entier">
             </a>
 
             <div class="navbar-center">
@@ -55,13 +55,13 @@ function menuClass($action): string
                     <?php if (Utils::hasUserConnected()): ?>
                         <li class="thread-menu <?= menuClass('showthreads') ?>">
                             <a href="?action=showthreads">
-                                <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                                <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie">
                                 Messagerie
                             </a>
                         </li>
                         <li class="<?= menuClass('showmyaccount') ?>">
                             <a href="?action=showmyaccount">
-                                <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
+                                <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte">
                                 Mon compte
                             </a>
                         </li>
@@ -91,13 +91,13 @@ function menuClass($action): string
                         <?php if (Utils::hasUserConnected()): ?>
                             <li class="thread-menu <?= menuClass('showthreads') ?>">
                                 <a class="p-5" href="?action=showthreads">
-                                    <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie" />
+                                    <img class="message-icon" src="./public/img/messagerie.svg" alt="Icône messagerie">
                                     Messagerie
                                 </a>
                             </li>
                             <li class="<?= menuClass('showmyaccount') ?>">
                                 <a class="p-5" href="?action=showmyaccount">
-                                    <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte" />
+                                    <img class="account-icon" src="./public/img/account.svg" alt="Icône mon compte">
                                     Mon compte
                                 </a>
                             </li>
@@ -148,7 +148,7 @@ function menuClass($action): string
         <a href="#">Politique de confidentialité</a>
         <a href="#">Mentions légales</a>
         <p>Tom Troc©</p>
-        <img src="./public/img/tt.svg" alt="Logo Tom Troc avec les initiales" />
+        <img src="./public/img/tt.svg" alt="Logo Tom Troc avec les initiales">
     </footer>
 
     <?php if (Utils::hasUserConnected()): ?>
