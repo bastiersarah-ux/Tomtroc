@@ -159,6 +159,10 @@ class BookController extends AbstractController
             // On sauvegarde le fichier s'il est passé dans le formulaire
             Utils::savePicture($picture, $filename, "books");
 
+            if (!empty($oldFileName) && $oldFileName != $filename) {
+                Utils::deletePicture($oldFileName, "books");
+            }
+
             // On stocke l’erreur
             View::sendSuccessAlert(empty($idBook) ? "Livre ajouté avec succès" : "Livre modifié avec succès");
 

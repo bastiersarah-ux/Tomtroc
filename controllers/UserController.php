@@ -250,7 +250,7 @@ class UserController extends AbstractController
                 return;
             }
 
-
+            $oldFileName = $user->getProfilePicture();
             $filename = Utils::generateNewFilename($picture, $user->getProfilePicture());
             // On génère un slug basé sur le username
             $slug = Utils::slugify($username);
@@ -270,6 +270,9 @@ class UserController extends AbstractController
             );
 
             Utils::savePicture($picture, $filename, "users");
+            if (!empty($oldFileName) && $oldFileName != $filename) {
+                Utils::deletePicture($oldFileName, "users");
+            }
 
             View::sendSuccessAlert("Information enregistré avec succès");
         } catch (Exception $ex) {
